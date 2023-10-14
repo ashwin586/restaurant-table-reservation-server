@@ -73,7 +73,6 @@ export const newPasswordCreate = async(password, email) =>{
   try{
     const hashedPassword = await securePassword(password);
     const user = await findUser(email)
-    console.log(user)
     if(user){
       removeData(email);
       return await savenewpassword(hashedPassword, user);
