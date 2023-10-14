@@ -22,3 +22,12 @@ export const findUser = async(email) => {
         console.log(err)
     }
 }
+
+export const savenewpassword = async (password, userData) => {
+    try{
+        userData.password = password;
+        return await userData.save();
+    }catch(err){
+        console.log(err)
+    }
+}

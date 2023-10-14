@@ -1,20 +1,20 @@
 import express from "express";
+import session from "express-session";
 import connectDB from "./config/mongo.js";
 import cors from "cors";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 import userRoute from "./interfaces/routes/userRoutes.js";
 import adminRoutes from "./interfaces/routes/adminRoutes.js";
+import { v4 as uuidv4 } from "uuid";
 dotenv.config();
+
+const allowedOrigins = [process.env.ALLOWEDORIGINS];
+
 const app = express();
+
 app.use(cors());
-app.use(express.json({extended: true }));
-app.use(express.urlencoded());
-
-
-app.use('/', userRoute);
-app.use('/admin', adminRoutes);
-
-const allowedOrigins = ["http://localhost:3000"];
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cors({
@@ -28,6 +28,21 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(
+  session({
+    secret: uuidv4(),
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
+
+
+app.use("/", userRoute);
+app.use("/admin", adminRoutes);
 
 connectDB();
 
