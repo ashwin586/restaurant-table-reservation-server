@@ -29,9 +29,10 @@ export const login = async (req, res) => {
   try {
     const response = await checkUserInfo(req.body);
     if (response) {
-      return res.status(200).end();
+      return res.status(200).json({userToken: response.userToken});
     }
   } catch (err) {
+    console.log(err)
     return res.status(400).json({ message: err.message });
   }
 };

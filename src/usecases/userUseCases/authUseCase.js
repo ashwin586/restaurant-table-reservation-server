@@ -1,3 +1,4 @@
+import { generateUserToken } from "../../middlewares/jwtAuth.js";
 import { saveUser, findUser, savenewpassword } from "../../repositories/userRepository.js";
 import { matchPassword, securePassword } from "../../services/bcrypt.js";
 import {retrieveData, removeData } from "../../services/nodemailer.js";
@@ -25,6 +26,7 @@ export const userData = async (userDetails) => {
 };
 
 export const checkUserInfo = async (userData) => {
+  const email = userData.email
   try {
     const response = await findUser(userData.email);
     if (!response) {
@@ -36,10 +38,12 @@ export const checkUserInfo = async (userData) => {
       response.password
     );
 
-    if (!comparedPassword) {
+    if (comparedPassword) {
+      const userToken = await generateUserToken(email);
+      return {response, userToken};
+    } else {
       throw new Error("Invalid email or password");
     }
-    return response;
   } catch (err) {
     throw new Error(err.message);
   }
@@ -58,7 +62,6 @@ export const checkUser = async (email) => {
 export const userOtp = async (otp, email) => {
   try {
     const storedOtp = retrieveData(email)
-    console.log(storedOtp);
     if (storedOtp === otp) {
       return true
     } else{

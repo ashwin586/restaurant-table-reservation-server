@@ -31,3 +31,22 @@ export const savenewpassword = async (password, userData) => {
         console.log(err)
     }
 }
+
+export const findWithId = async (id) =>{
+    try{
+        return await user.findById(id);
+    } catch(err){
+        console.log(err);
+    }
+}
+
+export const saveUserProfile = async (userData, imageURL) =>{
+    try{
+        if(imageURL){
+            userData.userImage = imageURL;
+            return await userData.save();
+        }
+    }catch(err){
+        console.log(err);
+    }
+}

@@ -7,11 +7,9 @@ export const generateOtp = () => {
 
 export const storeData = (email, otp) => {
   map.set(email, otp);
-  console.log(map)
 };
 
 export const retrieveData = (email) => {
-  console.log(map.get(email))
   return map.get(email);
 };
 
