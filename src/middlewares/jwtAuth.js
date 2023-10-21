@@ -2,6 +2,7 @@ import Jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
 
+// HANDLING ADMIN TOKEN
 export const generateAdminToken = async (email) => {
   try {
     return Jwt.sign(email, process.env.JWTSECRETKEY);
@@ -24,6 +25,7 @@ export const adminCheck = async (req, res, next) => {
   }
 };
 
+// HANDLING USER TOKEN
 export const generateUserToken = async (email) => {
   try {
     const payload = {
@@ -49,3 +51,15 @@ export const decodeToken = async (req, res, next) => {
     console.log(err);
   }
 };
+
+// HANDLING PARTNER TOKEN
+export const generatePartnerToken = async (number) =>{
+  try{
+    const payload = {
+      number: number
+    }
+    return Jwt.sign(payload, process.env.JWTSECRETKEY);
+  }catch(err){
+    console.log(err);
+  }
+}

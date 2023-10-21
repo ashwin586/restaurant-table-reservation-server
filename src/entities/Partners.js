@@ -1,7 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
-const userSchema = new Schema({
+const PartnersSchema = new Schema({
   name: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },
@@ -9,25 +13,21 @@ const userSchema = new Schema({
     type: Number,
     required: true,
   },
-  email: {
-    type: String,
-    required: true,
-  },
   password: {
     type: String,
-    required: true,
+    required: true
   },
   accountStatus: {
     type: Boolean,
     default: false,
   },
-  userImage: {
+  imageURL: {
     type: String,
   },
-  registerDate: {
-    type: String,
-    default: Date.now(),
-  },
+  verified: {
+    type: Boolean,
+    default: false
+  }
 });
 
-export default mongoose.model("users", userSchema);
+export default mongoose.model("Partners", PartnersSchema);

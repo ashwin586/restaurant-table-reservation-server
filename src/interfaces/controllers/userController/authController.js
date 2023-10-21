@@ -32,7 +32,6 @@ export const login = async (req, res) => {
       return res.status(200).json({userToken: response.userToken});
     }
   } catch (err) {
-    console.log(err)
     return res.status(400).json({ message: err.message });
   }
 };
@@ -52,7 +51,6 @@ export const emailVerify = async (req, res) => {
       return res.status(200).end();
     }
   } catch (err) {
-    console.log(err)
     return res.status(400).json({ message: err.message });
   }
 };

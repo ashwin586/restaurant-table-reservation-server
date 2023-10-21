@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import userRoute from "./interfaces/routes/userRoutes.js";
 import adminRoutes from "./interfaces/routes/adminRoutes.js";
 import { v4 as uuidv4 } from "uuid";
+import partnerRoutes from "./interfaces/routes/partnerRoutes.js";
 dotenv.config();
 
 const allowedOrigins = [process.env.ALLOWEDORIGINS];
@@ -43,7 +44,7 @@ app.use(
 
 app.use("/", userRoute);
 app.use("/admin", adminRoutes);
-
+app.use('/partner', partnerRoutes);
 connectDB();
 
 app.listen(process.env.PORT, () => {
