@@ -1,4 +1,4 @@
-import { verifyLogin, verifyRegister } from "../../../../usecases/partnerUseCases/partnerAuthUseCase.js";
+import { verifyLogin, verifyRegister } from "../../../usecases/partnerUseCases/partnerAuthUseCase.js";
 
 export const partnerRegister = async (req, res) => {
     try{

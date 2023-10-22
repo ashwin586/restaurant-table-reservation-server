@@ -15,7 +15,7 @@ const PartnersSchema = new Schema({
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   accountStatus: {
     type: Boolean,
@@ -26,8 +26,8 @@ const PartnersSchema = new Schema({
   },
   verified: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 export default mongoose.model("Partners", PartnersSchema);

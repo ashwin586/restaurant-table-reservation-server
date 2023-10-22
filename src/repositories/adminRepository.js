@@ -1,4 +1,5 @@
 import Partners from '../entities/Partners.js';
+import Restaurants from '../entities/Restaurants.js'
 
 export const findAllPartners = async () =>{
     try{
@@ -21,5 +22,13 @@ export const savePartner = async (partner) =>{
         return await partner.save();
     }catch(err){
         console.log(err);
+    }
+}
+
+export const findAllRestaurants = async () =>{
+    try{
+        return await Restaurants.find().populate('partner');
+    }catch(err){
+        console.log(err)
     }
 }

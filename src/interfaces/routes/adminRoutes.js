@@ -11,6 +11,7 @@ import {
   getPartners,
   unbockPartner,
 } from "../controllers/adminController/adminPartnerManagment.js";
+import { getAllRestaurant } from "../controllers/adminController/AdminRestaurantManagment.js";
 
 const adminRoutes = Router();
 
@@ -23,5 +24,7 @@ adminRoutes.put("/unBlockUser", adminCheck, unBlockUser);
 adminRoutes.get("/getPartnersData", adminCheck, getPartners);
 adminRoutes.put("/blockPartner", adminCheck, blockPartner);
 adminRoutes.put("/unBlockPartner", adminCheck, unbockPartner);
+
+adminRoutes.get('/getAllRestaurants', adminCheck, getAllRestaurant);
 
 export default adminRoutes;
