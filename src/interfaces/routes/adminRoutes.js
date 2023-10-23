@@ -5,13 +5,20 @@ import {
   blockUser,
   unBlockUser,
 } from "../controllers/adminController/adminUserManagment.js";
+
 import { adminCheck } from "../../middlewares/jwtAuth.js";
+
 import {
   blockPartner,
   getPartners,
   unbockPartner,
 } from "../controllers/adminController/adminPartnerManagment.js";
-import { getAllRestaurant } from "../controllers/adminController/AdminRestaurantManagment.js";
+
+import {
+  getAllRestaurant,
+  listRestaurant,
+  unlistRestaurant,
+} from "../controllers/adminController/AdminRestaurantManagment.js";
 
 const adminRoutes = Router();
 
@@ -25,6 +32,8 @@ adminRoutes.get("/getPartnersData", adminCheck, getPartners);
 adminRoutes.put("/blockPartner", adminCheck, blockPartner);
 adminRoutes.put("/unBlockPartner", adminCheck, unbockPartner);
 
-adminRoutes.get('/getAllRestaurants', adminCheck, getAllRestaurant);
+adminRoutes.get("/getAllRestaurants", adminCheck, getAllRestaurant);
+adminRoutes.put("/unlistRestaurant", adminCheck, unlistRestaurant);
+adminRoutes.put("/listRestaurant", adminCheck, listRestaurant);
 
 export default adminRoutes;

@@ -33,6 +33,8 @@ export const checkUserInfo = async (userData) => {
       throw new Error("Email not registered");
     }
 
+    if(response.accountStatus) throw new Error('Account has been blocked by the admin');
+
     const comparedPassword = await matchPassword(
       userData.password,
       response.password
