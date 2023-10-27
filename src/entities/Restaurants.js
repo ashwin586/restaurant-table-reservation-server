@@ -6,7 +6,8 @@ const restaurantSchema = new Schema({
     required: true,
   },
   cuisine: {
-    type: Array,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Cuisines",
     required: true,
   },
   openTime: {
@@ -19,11 +20,11 @@ const restaurantSchema = new Schema({
   },
   isBlocked: {
     type: Boolean,
-    default: false
+    default: false,
   },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   images: [
     {
@@ -33,8 +34,8 @@ const restaurantSchema = new Schema({
   partner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Partners",
-    required: true
-  }
+    required: true,
+  },
 });
 
-export default mongoose.model('Restaurants', restaurantSchema);
+export default mongoose.model("Restaurants", restaurantSchema);
