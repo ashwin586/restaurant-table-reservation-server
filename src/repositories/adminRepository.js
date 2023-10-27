@@ -76,3 +76,11 @@ export const findCuisineWithName = async (cuisine) => {
     console.log(err);
   }
 };
+
+export const findAndDeleteCuisine = async(id) => {
+  try{
+    return await Cuisines.findByIdAndDelete(id)
+  }catch(err){
+    console.log(err)
+  }
+}

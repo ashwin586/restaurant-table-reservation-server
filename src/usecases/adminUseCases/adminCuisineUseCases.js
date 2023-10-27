@@ -1,4 +1,4 @@
-import { findCuisineWithName, registerCuisine } from "../../repositories/adminRepository.js";
+import { findAllCuisine, findAndDeleteCuisine, findCuisineWithName, registerCuisine } from "../../repositories/adminRepository.js";
 
 export const addingCuisine = async (cuisine) => {
   try {
@@ -11,3 +11,19 @@ export const addingCuisine = async (cuisine) => {
     throw new Error(err.message)
   }
 };
+
+export const findallcuisines = async () => {
+  try{
+    return await findAllCuisine();
+  }catch(err){
+    console.log(err);
+  }
+}
+
+export const deletecuisine = async (id) => {
+  try{
+    return await findAndDeleteCuisine(id);
+  }catch(err){
+    console.log(err)
+  }
+}
