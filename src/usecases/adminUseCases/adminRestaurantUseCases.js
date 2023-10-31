@@ -35,3 +35,35 @@ export const list = async (id) => {
     console.log(err);
   }
 };
+
+export const approve = async (id) => {
+  try {
+    const restaurant = await findRestaurantWithId(id);
+    if (restaurant) {
+      restaurant.isApproved = "Approved";
+      await saveRestaurant(restaurant);
+      return true;
+    } else {
+      throw new Error("Something went wrong");
+    }
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.message);
+  }
+};
+
+export const reject = async(id) => {
+  try{
+    const restaurant = await findRestaurantWithId(id);
+    if(restaurant){
+      restaurant.isApproved = 'Rejected'
+      await saveRestaurant(restaurant);
+      return true
+    } else {
+      throw new Error('Something went wrong');
+    }
+  }catch(err){
+    console.log(err)
+    throw new Error(err.message);
+  }
+}

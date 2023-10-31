@@ -15,6 +15,7 @@ import {
 } from "../controllers/adminController/adminPartnerManagment.js";
 
 import {
+  approveRestaurant,
   getAllRestaurant,
   listRestaurant,
   unlistRestaurant,
@@ -37,6 +38,8 @@ adminRoutes.put("/unBlockPartner", adminCheck, unbockPartner);
 adminRoutes.get("/getAllRestaurants", adminCheck, getAllRestaurant);
 adminRoutes.put("/unlistRestaurant", adminCheck, unlistRestaurant);
 adminRoutes.put("/listRestaurant", adminCheck, listRestaurant);
+adminRoutes.put('/restaurantApprove', adminCheck, approveRestaurant)
+adminRoutes.put('/restaurantReject', adminCheck, )
 
 adminRoutes.post("/addcusines", adminCheck, addCusines);
 adminRoutes.get('/getAllCusinies', adminCheck, findAllCuisines);

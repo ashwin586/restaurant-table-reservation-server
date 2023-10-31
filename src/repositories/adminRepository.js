@@ -28,7 +28,7 @@ export const savePartner = async (partner) => {
 
 export const findAllRestaurants = async () => {
   try {
-    return await Restaurants.find().populate("partner");
+    return await Restaurants.find().populate("partner").populate('cuisine');
   } catch (err) {
     console.log(err);
   }

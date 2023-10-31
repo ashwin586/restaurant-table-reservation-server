@@ -1,4 +1,4 @@
-import { newRestaurant } from "../../../usecases/partnerUseCases/partnerRestaurantUseCases.js"
+import { allCuisines, newRestaurant } from "../../../usecases/partnerUseCases/partnerRestaurantUseCases.js"
 
 export const createRestaurant = async (req, res) => {
     try{
@@ -9,3 +9,12 @@ export const createRestaurant = async (req, res) => {
         console.log(err)
     }
 }
+
+export const fetchingCuisines = async (req, res) => {
+    try{
+        const result = await allCuisines()
+        return res.status(200).json({result});
+    }catch(err){
+        console.log(err)
+    }
+} 

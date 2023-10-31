@@ -5,25 +5,38 @@ const restaurantSchema = new Schema({
     type: String,
     required: true,
   },
-  cuisine: {
+  cuisine: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cuisines",
     required: true,
-  },
+  }],
   openTime: {
-    type: String,
+    type: Date,
     required: true,
   },
   closeTime: {
-    type: String,
+    type: Date,
     required: true,
   },
   isBlocked: {
     type: Boolean,
     default: false,
   },
+  isApproved: {
+    type: String,
+    current: ['Pending', 'Approved', 'Rejected'],
+    default: 'Pending',
+  },
   address: {
     type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  pinCode: {
+    type: Number,
     required: true,
   },
   images: [
@@ -37,5 +50,4 @@ const restaurantSchema = new Schema({
     required: true,
   },
 });
-
 export default mongoose.model("Restaurants", restaurantSchema);

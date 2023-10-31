@@ -1,6 +1,8 @@
 import {
+  approve,
   fetchRestaurants,
   list,
+  reject,
   unlist,
 } from "../../../usecases/adminUseCases/adminRestaurantUseCases.js";
 
@@ -30,5 +32,29 @@ export const listRestaurant = async (req, res) => {
     return res.status(200).end();
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const approveRestaurant = async (req, res) => {
+  try {
+    const result = await approve(req.body.id);
+    if (result) {
+      return res.status(200).end();
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json(err.message);
+  }
+};
+
+export const rejectRestaurant = async (req, res) => {
+  try {
+    const result = await reject(req.bosy.id);
+    if (result) {
+      return res.status(200).end();
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json(err.message);
   }
 };
