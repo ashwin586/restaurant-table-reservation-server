@@ -1,4 +1,4 @@
-import { findAllCuisines, findPartner, saveRestaurant } from "../../repositories/partnerRepository.js";
+import { allRestaurant, findAllCuisines, findPartner, saveRestaurant } from "../../repositories/partnerRepository.js";
 import {selectedTime} from '../../services/moment.js';
 
 export const newRestaurant = async (restaurantData, number) =>{
@@ -19,5 +19,17 @@ export const allCuisines = async () => {
         return await findAllCuisines();
     }catch(err){
         console.log(err)
+    }
+}
+
+export const partnerRestaurant = async (phone) => {
+    try{
+        const partner = await findPartner(phone);
+        if(partner){
+            const id = partner._id;
+            return await allRestaurant(id);
+        }
+    }catch(err){
+        console.log(err);
     }
 }

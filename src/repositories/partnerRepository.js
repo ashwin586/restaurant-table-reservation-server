@@ -49,3 +49,11 @@ export const findAllCuisines = async () => {
     console.log(err)
   }
 }
+
+export const allRestaurant = async (id) => {
+  try{
+    return await Restaurants.find({partner: id}).populate('cuisine')
+  }catch(err){
+    console.log(err);
+  }
+}
