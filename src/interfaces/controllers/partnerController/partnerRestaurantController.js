@@ -1,5 +1,6 @@
 import {
   allCuisines,
+  alterRestaurant,
   newRestaurant,
   partnerRestaurant,
 } from "../../../usecases/partnerUseCases/partnerRestaurantUseCases.js";
@@ -34,5 +35,17 @@ export const fetchRestaurant = async (req, res) => {
   } catch (err) {
     console.log(err);
     throw new Error(err.message);
+  }
+};
+
+export const editRestaurant = async (req, res) => {
+  try {
+    const result = await alterRestaurant(req.body.values);
+    if (result) {
+      return res.status(200).end();
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json(err.message);
   }
 };

@@ -1,6 +1,6 @@
 import Partners from "../entities/Partners.js";
 import Restaurants from "../entities/Restaurants.js";
-import Cuisines from '../entities/cuisine.js'
+import Cuisines from "../entities/cuisine.js";
 
 export const savePartner = async (data, hashedPassword) => {
   try {
@@ -43,17 +43,33 @@ export const saveRestaurant = async (data, id, openTime, closeTime) => {
 };
 
 export const findAllCuisines = async () => {
-  try{
+  try {
     return await Cuisines.find();
-  }catch(err){
-    console.log(err)
-  }
-}
-
-export const allRestaurant = async (id) => {
-  try{
-    return await Restaurants.find({partner: id}).populate('cuisine')
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
+};
+
+export const allRestaurant = async (id) => {
+  try {
+    return await Restaurants.find({ partner: id }).populate("cuisine");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findRestaurant = async (id) => {
+  try {
+    return await Restaurants.findById(id);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const saveEditedRestaurant = async (restaurant) => {
+  try {
+    return await restaurant.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
