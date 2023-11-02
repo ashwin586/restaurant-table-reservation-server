@@ -22,6 +22,7 @@ import {
 } from "../controllers/adminController/AdminRestaurantManagment.js";
 
 import { addCusines, deleteCuisine, findAllCuisines } from "../controllers/adminController/AdminCusinesController.js";
+import { addCategory, getAllCategory } from "../controllers/adminController/AdminCategoryController.js";
 
 const adminRoutes = Router();
 
@@ -43,7 +44,9 @@ adminRoutes.put('/restaurantReject', adminCheck, )
 
 adminRoutes.post("/addcusines", adminCheck, addCusines);
 adminRoutes.get('/getAllCusinies', adminCheck, findAllCuisines);
+adminRoutes.delete('/deleteCuisine', adminCheck, deleteCuisine);
 
-adminRoutes.delete('/deleteCuisine', adminCheck, deleteCuisine)
+adminRoutes.post('/addCategory', adminCheck, addCategory)
+adminRoutes.get('/getAllCategory', adminCheck, getAllCategory)
 
 export default adminRoutes;

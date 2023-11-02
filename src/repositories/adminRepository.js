@@ -1,6 +1,7 @@
 import Partners from "../entities/Partners.js";
 import Restaurants from "../entities/Restaurants.js";
 import Cuisines from "../entities/cuisine.js";
+import Categories from "../entities/menuCategories.js";
 
 export const findAllPartners = async () => {
   try {
@@ -28,7 +29,7 @@ export const savePartner = async (partner) => {
 
 export const findAllRestaurants = async () => {
   try {
-    return await Restaurants.find().populate("partner").populate('cuisine');
+    return await Restaurants.find().populate("partner").populate("cuisine");
   } catch (err) {
     console.log(err);
   }
@@ -77,9 +78,28 @@ export const findCuisineWithName = async (cuisine) => {
   }
 };
 
-export const findAndDeleteCuisine = async(id) => {
+export const findAndDeleteCuisine = async (id) => {
+  try {
+    return await Cuisines.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const saveCategory = async (data) => {
+  try {
+    const newCategory = new Categories({
+      category: data.category,
+    });
+    return newCategory.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findAllCategory = async() => {
   try{
-    return await Cuisines.findByIdAndDelete(id)
+    return await Categories.find();
   }catch(err){
     console.log(err)
   }
