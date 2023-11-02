@@ -1,6 +1,8 @@
 import Partners from "../entities/Partners.js";
 import Restaurants from "../entities/Restaurants.js";
 import Cuisines from "../entities/cuisine.js";
+import Categories from "../entities/menuCategories.js";
+import Menu from "../entities/Menus.js";
 
 export const savePartner = async (data, hashedPassword) => {
   try {
@@ -69,6 +71,38 @@ export const findRestaurant = async (id) => {
 export const saveEditedRestaurant = async (restaurant) => {
   try {
     return await restaurant.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findCategories = async () => {
+  try {
+    return await Categories.find();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const savingMenu = async (data, id) => {
+  try {
+    const newMenu = new Menu({
+      name: data.name,
+      foodCategory: data.foodType,
+      quantity: data.quantity,
+      price: data.price,
+      imageURL: data.imageURL,
+      restaurant: id,
+    });
+    return await newMenu.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const restaurantMenus = async (id) => {
+  try {
+    return await Menu.find({ restaurant: id }).populate("foodCategory");
   } catch (err) {
     console.log(err);
   }

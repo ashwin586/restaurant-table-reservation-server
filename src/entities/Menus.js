@@ -5,6 +5,11 @@ const menuSchema = new Schema({
     type: String,
     required: true,
   },
+  foodCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Categories',
+    required: true
+  },
   quantity: {
     type: Number,
   },
