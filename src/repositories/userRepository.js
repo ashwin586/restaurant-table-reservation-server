@@ -1,4 +1,5 @@
 import user from '../entities/user.js'
+import Restaurants from '../entities/Restaurants.js';
 
 export const saveUser = async (userData) =>{
     try{
@@ -48,5 +49,21 @@ export const saveUserProfile = async (userData, imageURL) =>{
         }
     }catch(err){
         console.log(err);
+    }
+}
+
+export const findRestaurants = async() => {
+    try{
+        return await Restaurants.find({isApproved: 'Approved'});
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const findRestById = async(id) => {
+    try{
+        return await Restaurants.findById(id).populate('cuisine');
+    }catch(err){
+        console.log(err)
     }
 }
