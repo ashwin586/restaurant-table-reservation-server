@@ -1,5 +1,6 @@
 import user from '../entities/user.js'
 import Restaurants from '../entities/Restaurants.js';
+import Menu from '../entities/Menus.js'
 
 export const saveUser = async (userData) =>{
     try{
@@ -63,6 +64,14 @@ export const findRestaurants = async() => {
 export const findRestById = async(id) => {
     try{
         return await Restaurants.findById(id).populate('cuisine');
+    }catch(err){
+        console.log(err)
+    }
+}
+
+export const restaurantMenus = async(id) => {
+    try{
+        return await Menu.find({restaurant: id});
     }catch(err){
         console.log(err)
     }

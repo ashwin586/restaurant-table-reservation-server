@@ -1,9 +1,13 @@
-import { findRestById } from "../../repositories/userRepository.js";
+import { findRestById, restaurantMenus } from "../../repositories/userRepository.js";
 
 export const fetchRestaurant = async (id) => {
   try {
-    return await findRestById(id);
+    const restaurantDetails = await findRestById(id);
+    const menus = await restaurantMenus(id);
+    return {restaurantDetails, menus}
   } catch (err) {
     console.log(err);
   }
 };
+
+
