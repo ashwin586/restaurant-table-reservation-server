@@ -5,7 +5,25 @@ import {
   userOtp,
   newPasswordCreate,
 } from "../../../usecases/userUseCases/authUseCase.js";
-import { sendMail, generateOtp, storeData } from "../../../services/nodemailer.js";
+import {
+  sendMail,
+  generateOtp,
+  storeData,
+} from "../../../services/nodemailer.js";
+
+export const sendOtp = async (req, res) => {
+  try {
+    const otp = generateOtp();
+    const email = req.body.email;
+    storeData(email, otp);
+    const subject = "Email Verification otp";
+    const text = `Your email verificatoin OTP is ${otp}`;
+    await sendMail(email, subject, text);
+    return res.status(200).end();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const register = async (req, res) => {
   try {
@@ -29,25 +47,24 @@ export const login = async (req, res) => {
   try {
     const response = await checkUserInfo(req.body);
     if (response) {
-      return res.status(200).json({userToken: response.userToken});
+      return res.status(200).json({ userToken: response.userToken });
     }
   } catch (err) {
     return res.status(400).json({ message: err.message });
   }
 };
 
-
 export const emailVerify = async (req, res) => {
   try {
     const { email } = req.body;
     const hasUser = await checkUser(email);
     if (hasUser) {
-        const otp = generateOtp()
-        storeData(hasUser.email,otp);
-        const subject = 'Email verification otp'
-        const text = `The otp for your password reset is ${otp}`
-        const email = hasUser.email
-        await sendMail(email, subject, text, req);
+      const otp = generateOtp();
+      storeData(hasUser.email, otp);
+      const subject = "Email verification otp";
+      const text = `The otp for your password reset is ${otp}`;
+      const email = hasUser.email;
+      await sendMail(email, subject, text);
       return res.status(200).end();
     }
   } catch (err) {
@@ -55,27 +72,26 @@ export const emailVerify = async (req, res) => {
   }
 };
 
-
 export const otpVerify = async (req, res) => {
   try {
-    const {otp, email} = req.body;
+    const { otp, email } = req.body;
     const result = await userOtp(otp, email);
-    if(result){
-        return res.status(200).end();
+    if (result) {
+      return res.status(200).end();
     }
   } catch (err) {
-    return res.status(400).json({message: err.message})
+    return res.status(400).json({ message: err.message });
   }
 };
 
-export const newPassword = async (req, res) =>{
-    try{
-        const {password, email} = req.body
-        const result = await newPasswordCreate(password, email)
-        if(result){
-            return res.status(200).json({message: 'Password updated successfully'})
-        }
-    }catch(err){
-        return res.status(400).json({message: err.message});
+export const newPassword = async (req, res) => {
+  try {
+    const { password, email } = req.body;
+    const result = await newPasswordCreate(password, email);
+    if (result) {
+      return res.status(200).json({ message: "Password updated successfully" });
     }
-}
+  } catch (err) {
+    return res.status(400).json({ message: err.message });
+  }
+};

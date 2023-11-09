@@ -17,7 +17,7 @@ export const removeData = (email) =>{
   map.delete(email);
 }
 
-export const sendMail = async (email, subject, text, req) => {
+export const sendMail = async (email, subject, text) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
