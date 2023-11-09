@@ -107,3 +107,23 @@ export const restaurantMenus = async (id) => {
     console.log(err);
   }
 };
+
+export const saveEditedMenu = async (newMenu, id) => {
+  try {
+    return await Menu.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          name: newMenu.name,
+          foodCategory: newMenu.category,
+          quantity: newMenu.quantity,
+          price: newMenu.price,
+          imageURL: newMenu.imageURL,
+        },
+      },
+      { new: true }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};

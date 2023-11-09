@@ -104,3 +104,11 @@ export const findAllCategory = async() => {
     console.log(err)
   }
 }
+
+export const deletecategory = async(id) => {
+  try{
+    return await Categories.findByIdAndDelete(id)
+  }catch(err){
+    console.log(err)
+  }
+}

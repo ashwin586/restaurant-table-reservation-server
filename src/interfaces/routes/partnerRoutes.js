@@ -13,6 +13,7 @@ import {
 } from "../controllers/partnerController/partnerRestaurantController.js";
 import {
   addFood,
+  editedMenu,
   fetchAllCategories,
   findAllMenus
 } from "../controllers/partnerController/partnerMenuController.js";
@@ -33,4 +34,5 @@ partnerRoutes.get("/fetchCategories", decodePartnerToken, fetchAllCategories);
 
 partnerRoutes.post("/addFood", decodePartnerToken, addFood);
 partnerRoutes.get('/fetchAllMenus', decodePartnerToken, findAllMenus);
+partnerRoutes.put('/editMenu', decodePartnerToken, editedMenu)
 export default partnerRoutes;
