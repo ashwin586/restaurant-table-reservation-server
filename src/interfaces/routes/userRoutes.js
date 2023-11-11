@@ -4,6 +4,7 @@ import { fetchProfile, userImage } from '../controllers/userController/profileCo
 import { decodeToken } from '../../middlewares/jwtAuth.js';
 import { findAllRestaurants } from '../controllers/userController/homeContoller.js';
 import { findRestaurant } from '../controllers/userController/restaurantController.js';
+import { bookingTable } from '../controllers/userController/bookingController.js';
 
 const userRoute = Router();
 
@@ -18,4 +19,6 @@ userRoute.post('/uploadProfilePicture', decodeToken, userImage);
 
 userRoute.get('/getAllRestaurants', findAllRestaurants)
 userRoute.get('/getRestaurantDetails', findRestaurant)
+
+userRoute.post('/bookingTable', decodeToken, bookingTable);
 export default userRoute;
