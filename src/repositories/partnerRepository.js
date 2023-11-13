@@ -33,6 +33,7 @@ export const saveRestaurant = async (data, id, openTime, closeTime) => {
       cuisine: data.selectedCuisines,
       openTime: openTime,
       closeTime: closeTime,
+      seats: data.seats,
       address: data.address,
       city: data.city,
       pinCode: data.pinCode,

@@ -14,7 +14,6 @@ export const newRestaurant = async (restaurantData, number) => {
     const id = partner._id;
     const openTime = selectedTime(restaurantData.openTime);
     const closeTime = selectedTime(restaurantData.closeTime);
-    console.log(openTime);
     return await saveRestaurant(restaurantData, id, openTime, closeTime);
   } catch (err) {
     console.log(err);

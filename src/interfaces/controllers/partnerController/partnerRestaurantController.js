@@ -33,8 +33,7 @@ export const fetchRestaurant = async (req, res) => {
       throw new Error("Cant find restaurants for this partner");
     }
   } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
+    return res.status(400).json({ error: err.message }); 
   }
 };
 

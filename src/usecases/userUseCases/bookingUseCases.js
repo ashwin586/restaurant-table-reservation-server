@@ -2,6 +2,7 @@ import {
   findUser,
   inventoryManagment,
   saveBooking,
+  findBookings,
 } from "../../repositories/userRepository.js";
 
 export const tableReservation = async (data, userEmail) => {
@@ -14,5 +15,19 @@ export const tableReservation = async (data, userEmail) => {
     return true;
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const fetchBookings = async (email) => {
+  try {
+    const bookings = await findBookings(email);
+    if (bookings) {
+      return bookings;
+    } else {
+      throw new Error(`You haven't made a booking yet.`);
+    }
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.message);
   }
 };

@@ -5,11 +5,13 @@ const restaurantSchema = new Schema({
     type: String,
     required: true,
   },
-  cuisine: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Cuisines",
-    required: true,
-  }],
+  cuisine: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cuisines",
+      required: true,
+    },
+  ],
   openTime: {
     type: Date,
     required: true,
@@ -24,11 +26,15 @@ const restaurantSchema = new Schema({
   },
   isApproved: {
     type: String,
-    current: ['Pending', 'Approved', 'Rejected'],
-    default: 'Pending',
+    current: ["Pending", "Approved", "Rejected"],
+    default: "Pending",
   },
   address: {
     type: String,
+    required: true,
+  },
+  seats: {
+    type: Number,
     required: true,
   },
   city: {

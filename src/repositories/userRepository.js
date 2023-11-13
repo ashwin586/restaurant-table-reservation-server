@@ -115,3 +115,40 @@ export const saveBooking = async (userId, data, total) => {
     console.log(err);
   }
 };
+
+export const findBookings = async (email) => {
+  try {
+    const result = await Booking.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "userBookings",
+        },
+      },
+      {
+        $unwind: "$userBookings",
+      },
+      {
+        $lookup: {
+          from: "restaurants",
+          localField: "restaurant",
+          foreignField: "_id",
+          as: "restaurantDetails",
+        },
+      },
+      {
+        $unwind: "$restaurantDetails",
+      },
+      {
+        $match: {
+          "userBookings.email": email,
+        },
+      },
+    ]);
+    return result
+  } catch (err) {
+    console.log(err);
+  }
+};
