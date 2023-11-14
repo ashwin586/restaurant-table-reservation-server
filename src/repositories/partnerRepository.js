@@ -3,6 +3,7 @@ import Restaurants from "../entities/Restaurants.js";
 import Cuisines from "../entities/cuisine.js";
 import Categories from "../entities/menuCategories.js";
 import Menu from "../entities/Menus.js";
+import Bookings from "../entities/Booking.js";
 
 export const savePartner = async (data, hashedPassword) => {
   try {
@@ -124,6 +125,27 @@ export const saveEditedMenu = async (newMenu, id) => {
       },
       { new: true }
     );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findAllOrders = async (number) => {
+  try {
+    const orders = await Bookings.aggregate([
+      {
+        $lookup: {
+          from: "Restaurants",
+          localField: "restaurant",
+          foreignField: "_id",
+          as: "restaurantDetails",
+        },
+      },
+      {
+        $unwind: "$restaurantDetails",
+      },
+    ]);
+    console.log(orders);
   } catch (err) {
     console.log(err);
   }
