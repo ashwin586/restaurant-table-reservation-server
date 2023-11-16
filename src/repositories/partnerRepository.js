@@ -141,7 +141,25 @@ export const findAllOrders = async (id) => {
         select: "name quantity price imageURL",
       });
     return orders;
-    // console.log(JSON.stringify(orders, null, 2));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const partnerSave = async (data, number) => {
+  try {
+    return await Partners.findOneAndUpdate(
+      { phoneNumber: number },
+      {
+        $set: {
+          name: data.name,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          imageURL: data.imageURL,
+        },
+      },
+      { new: true }
+    );
   } catch (err) {
     console.log(err);
   }
