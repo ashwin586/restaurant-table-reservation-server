@@ -2,8 +2,11 @@ import { getAllOrders } from "../../../usecases/partnerUseCases/partnerOrdersUse
 
 export const fetchAllOrders = async (req, res) => {
   try {
-    const number = req.token.number;
-    const reuslt = await getAllOrders(number);
+    const id = req.query.id;
+    const result = await getAllOrders(id);
+    if (result) {
+      return res.status(200).json(result);
+    }
   } catch (err) {
     console.log(err);
   }

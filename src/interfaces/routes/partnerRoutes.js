@@ -37,5 +37,5 @@ partnerRoutes.post("/addFood", decodePartnerToken, addFood);
 partnerRoutes.get('/fetchAllMenus', decodePartnerToken, findAllMenus);
 partnerRoutes.put('/editMenu', decodePartnerToken, editedMenu)
 
-partnerRoutes.get('/getAllOrdersOfPartner', decodePartnerToken, fetchAllOrders)
+partnerRoutes.get('/getAllOrdersOfRestaurant', decodePartnerToken, fetchAllOrders)
 export default partnerRoutes;

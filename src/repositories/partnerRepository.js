@@ -130,22 +130,18 @@ export const saveEditedMenu = async (newMenu, id) => {
   }
 };
 
-export const findAllOrders = async (number) => {
+export const findAllOrders = async (id) => {
   try {
-    const orders = await Bookings.aggregate([
-      {
-        $lookup: {
-          from: "Restaurants",
-          localField: "restaurant",
-          foreignField: "_id",
-          as: "restaurantDetails",
-        },
-      },
-      {
-        $unwind: "$restaurantDetails",
-      },
-    ]);
-    console.log(orders);
+    const orders = await Bookings.find({ restaurant: id })
+      .populate("restaurant", "name")
+      .populate("user", "name phoneNumber email")
+      .populate({
+        path: "cart.menu",
+        model: "Menu",
+        select: "name quantity price imageURL",
+      });
+    return orders;
+    // console.log(JSON.stringify(orders, null, 2));
   } catch (err) {
     console.log(err);
   }
