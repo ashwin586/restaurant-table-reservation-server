@@ -1,4 +1,5 @@
 import {
+  cancellingBooking,
   fetchBookings,
   tableReservation,
 } from "../../../usecases/userUseCases/bookingUseCases.js";
@@ -23,5 +24,16 @@ export const getBookings = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json(err.message);
+  }
+};
+
+export const cancelBooking = async (req, res) => {
+  try {
+    const result = await cancellingBooking(req.body.id, req.token.email);
+    if (result) {
+      return res.status(200).end();
+    }
+  } catch (err) {
+    console.log(err);
   }
 };

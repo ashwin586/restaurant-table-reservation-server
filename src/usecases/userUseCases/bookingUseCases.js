@@ -3,6 +3,7 @@ import {
   inventoryManagment,
   saveBooking,
   findBookings,
+  bookingCancel,
 } from "../../repositories/userRepository.js";
 
 export const tableReservation = async (data, userEmail) => {
@@ -29,5 +30,16 @@ export const fetchBookings = async (email) => {
   } catch (err) {
     console.log(err);
     throw new Error(err.message);
+  }
+};
+
+export const cancellingBooking = async (bookingId, userId) => {
+  try {
+    const response = await bookingCancel(bookingId, userId);
+    if(response){
+      return true
+    }
+  } catch (err) {
+    console.log(err);
   }
 };

@@ -17,17 +17,18 @@ export const saveUser = async (userData) => {
   }
 };
 
-export const saveGoogleData = async(name, email) => {
-  try{
+export const saveGoogleData = async (name, email) => {
+  try {
     const newUser = new user({
       name: name,
-      email:email
-    })
-    return await newUser.save();F
-  }catch(err){  
-    console.log(err)
+      email: email,
+    });
+    return await newUser.save();
+    F;
+  } catch (err) {
+    console.log(err);
   }
-}
+};
 
 export const findUser = async (email) => {
   try {
@@ -159,7 +160,27 @@ export const findBookings = async (email) => {
         },
       },
     ]);
-    return result
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const bookingCancel = async (bookingId, userId) => {
+  try {
+    const booking = await Booking.findByIdAndUpdate(
+      bookingId,
+      { $set: { orderStatus: "Cancelled" } },
+      { new: true }
+    );
+    const total = booking.grandTotal;
+    const cancellationFee = 0.15 * total;
+    await user.findOneAndUpdate(
+      { email: userId },
+      { $inc: { "wallet.balance": cancellationFee } },
+      { new: true }
+    );
+    return true;
   } catch (err) {
     console.log(err);
   }

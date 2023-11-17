@@ -18,6 +18,7 @@ import { findAllRestaurants } from "../controllers/userController/homeContoller.
 import { findRestaurant } from "../controllers/userController/restaurantController.js";
 import {
   bookingTable,
+  cancelBooking,
   getBookings,
 } from "../controllers/userController/bookingController.js";
 
@@ -28,8 +29,8 @@ userRoute.post("/sendOtp", sendOtp);
 userRoute.post("/login", login);
 userRoute.post("/emailverify", emailVerify);
 userRoute.post("/otpverify", otpVerify);
-userRoute.post('/google/signup', googleRegister);
-userRoute.post('/google/login', googleLogin);
+userRoute.post("/google/signup", googleRegister);
+userRoute.post("/google/login", googleLogin);
 
 userRoute.post("/savenewpassword", newPassword);
 userRoute.get("/getuserprofile", decodeToken, fetchProfile);
@@ -38,6 +39,7 @@ userRoute.post("/uploadProfilePicture", decodeToken, userImage);
 userRoute.get("/getAllRestaurants", findAllRestaurants);
 userRoute.get("/getRestaurantDetails", findRestaurant);
 userRoute.get("/getBookings", decodeToken, getBookings);
+userRoute.put("/bookingCancel", decodeToken, cancelBooking);
 
 userRoute.post("/bookingTable", decodeToken, bookingTable);
 export default userRoute;

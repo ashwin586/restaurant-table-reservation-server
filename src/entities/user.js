@@ -26,6 +26,12 @@ const userSchema = new Schema({
     type: String,
     default: Date.now(),
   },
+  wallet: {
+    balance: {
+      type: Number,
+      default: 0
+    }
+  }
 });
 
 export default mongoose.model("users", userSchema);
