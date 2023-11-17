@@ -7,7 +7,6 @@ const userSchema = new Schema({
   },
   phoneNumber: {
     type: Number,
-    required: true,
   },
   email: {
     type: String,
@@ -15,7 +14,6 @@ const userSchema = new Schema({
   },
   password: {
     type: String,
-    required: true,
   },
   accountStatus: {
     type: Boolean,

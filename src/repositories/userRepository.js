@@ -17,6 +17,18 @@ export const saveUser = async (userData) => {
   }
 };
 
+export const saveGoogleData = async(name, email) => {
+  try{
+    const newUser = new user({
+      name: name,
+      email:email
+    })
+    return await newUser.save();F
+  }catch(err){  
+    console.log(err)
+  }
+}
+
 export const findUser = async (email) => {
   try {
     const result = await user.findOne({ email: email });

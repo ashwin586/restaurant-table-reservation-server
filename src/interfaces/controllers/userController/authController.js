@@ -4,6 +4,8 @@ import {
   checkUser,
   userOtp,
   newPasswordCreate,
+  googleSignUp,
+  checkExistingUser,
 } from "../../../usecases/userUseCases/authUseCase.js";
 import {
   sendMail,
@@ -43,6 +45,18 @@ export const register = async (req, res) => {
   }
 };
 
+export const googleRegister = async (req, res) => {
+  try {
+    const { displayName, email } = req.body;
+    const result = await googleSignUp(displayName, email);
+    if (result) {
+      return res.status(200).end();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const login = async (req, res) => {
   try {
     const response = await checkUserInfo(req.body);
@@ -51,6 +65,17 @@ export const login = async (req, res) => {
     }
   } catch (err) {
     return res.status(400).json({ message: err.message });
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  try {
+    const result = await checkExistingUser(req.body.email)
+    if(result.userToken){
+      return res.status(200).json({userToken: result.userToken});
+    }
+  } catch (err) {
+    console.log(err);
   }
 };
 
