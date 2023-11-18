@@ -1,6 +1,8 @@
 import {
   cancellingBooking,
   fetchBookings,
+  findReview,
+  savingReview,
   tableReservation,
 } from "../../../usecases/userUseCases/bookingUseCases.js";
 
@@ -32,6 +34,32 @@ export const cancelBooking = async (req, res) => {
     const result = await cancellingBooking(req.body.id, req.token.email);
     if (result) {
       return res.status(200).end();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const userReview = async (req, res) => {
+  try {
+    const result = await savingReview(
+      req.body.values,
+      req.body.id,
+      req.token.email
+    );
+    if (result) {
+      return res.status(200).end();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const fetchReview = async (req, res) => {
+  try {
+    const result = await findReview(req.query.id, req.token.email);
+    if (result) {
+      return res.status(200).json(result);
     }
   } catch (err) {
     console.log(err);

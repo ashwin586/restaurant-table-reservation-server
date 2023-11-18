@@ -2,6 +2,7 @@ import user from "../entities/user.js";
 import Restaurants from "../entities/Restaurants.js";
 import Menu from "../entities/Menus.js";
 import Booking from "../entities/Booking.js";
+import Reviews from "../entities/Reviews.js";
 
 export const saveUser = async (userData) => {
   try {
@@ -181,6 +182,41 @@ export const bookingCancel = async (bookingId, userId) => {
       { new: true }
     );
     return true;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const newReview = async (rating, textReview, restId, userId) => {
+  try {
+    const existingReview = await Reviews.findOne({
+      user: userId,
+      restaurant: restId,
+    });
+    if (existingReview) {
+      const existingReviewId = existingReview._id;
+      return await Reviews.findByIdAndUpdate(
+        existingReviewId,
+        { $set: { rating: rating, review: textReview } },
+        { new: true }
+      );
+    } else {
+      const review = new Reviews({
+        user: userId,
+        restaurant: restId,
+        rating: rating,
+        review: textReview,
+      });
+      return await review.save();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findingReview = async (restId, userId) => {
+  try {
+    return await Reviews.findOne({ user: userId, restaurant: restId });
   } catch (err) {
     console.log(err);
   }

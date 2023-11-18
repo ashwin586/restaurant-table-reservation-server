@@ -19,7 +19,9 @@ import { findRestaurant } from "../controllers/userController/restaurantControll
 import {
   bookingTable,
   cancelBooking,
+  fetchReview,
   getBookings,
+  userReview,
 } from "../controllers/userController/bookingController.js";
 
 const userRoute = Router();
@@ -42,4 +44,6 @@ userRoute.get("/getBookings", decodeToken, getBookings);
 userRoute.put("/bookingCancel", decodeToken, cancelBooking);
 
 userRoute.post("/bookingTable", decodeToken, bookingTable);
+userRoute.post("/userReview", decodeToken, userReview);
+userRoute.get('/fetchReview', decodeToken, fetchReview);
 export default userRoute;
