@@ -42,24 +42,9 @@ export const partnerRestaurant = async (phone) => {
 
 export const alterRestaurant = async (data) => {
   try {
-    const existingRestaurant = await findRestaurant(data._id);
-    if (existingRestaurant) {
-      existingRestaurant.name = data.name;
-      existingRestaurant.cuisine = data.cuisine;
-      existingRestaurant.openTime = data.opens;
-      existingRestaurant.closeTime = data.closes;
-      existingRestaurant.address = data.streetAddress;
-      existingRestaurant.pinCode = data.pinCode;
-      existingRestaurant.city = data.city;
-      if (data.imageURl.length > 0) {
-        data.imageURl.forEach((image) => {
-          existingRestaurant.images.push(image);
-        });
-      }
-      await saveEditedRestaurant(existingRestaurant);
-      return true;
-    } else {
-      throw new Error("Something went wrong");
+    const response = await saveEditedRestaurant(data);
+    if(response){
+      return true
     }
   } catch (err) {
     console.log(err);

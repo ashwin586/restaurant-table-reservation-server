@@ -55,5 +55,13 @@ const restaurantSchema = new Schema({
     ref: "Partners",
     required: true,
   },
+  latitude: {
+    type: Number,
+    required: true,
+  },
+  longitude: {
+    type: Number,
+    required: true,
+  },
 });
 export default mongoose.model("Restaurants", restaurantSchema);

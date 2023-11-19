@@ -39,6 +39,8 @@ export const saveRestaurant = async (data, id, openTime, closeTime) => {
       city: data.city,
       pinCode: data.pinCode,
       partner: id,
+      latitude: data.latitude,
+      longitude: data.longitude,
     });
     return await newRestaurant.save();
   } catch (err) {
@@ -69,10 +71,29 @@ export const findRestaurant = async (id) => {
     console.log(err);
   }
 };
-
 export const saveEditedRestaurant = async (restaurant) => {
   try {
-    return await restaurant.save();
+    const imageUrlArray = restaurant.imageURl || [];
+    return Restaurants.findByIdAndUpdate(
+      restaurant._id,
+      {
+        $set: {
+          name: restaurant.name,
+          cuisine: restaurant.cuisine,
+          openTime: restaurant.opens,
+          closeTime: restaurant.closes,
+          address: restaurant.address,
+          city: restaurant.city,
+          pinCode: restaurant.pinCode,
+          latitude: restaurant.latitude,
+          longitude: restaurant.longitude,
+        },
+        $addToSet: {
+          images: { $each: imageUrlArray },
+        },
+      },
+      { new: true }
+    );
   } catch (err) {
     console.log(err);
   }
