@@ -4,6 +4,7 @@ import {
   findUser,
   savenewpassword,
   saveGoogleData,
+  editProfile,
 } from "../../repositories/userRepository.js";
 import { matchPassword, securePassword } from "../../services/bcrypt.js";
 import { retrieveData, removeData } from "../../services/nodemailer.js";
@@ -116,5 +117,21 @@ export const newPasswordCreate = async (password, email) => {
   } catch (err) {
     console.log(err);
     throw new Error(err.message);
+  }
+};
+
+export const editedUser = async (data, email) => {
+  try {
+    const { name, phoneNumber, password } = data;
+    console.log(name, phoneNumber, password);
+    const userObj = { name, phoneNumber };
+    if (password) {
+      const hashedPassword = await securePassword(password);
+      userObj.password = hashedPassword;
+    }
+    const response = await editProfile(userObj, email);
+    if (response) return true;
+  } catch (err) {
+    console.log(err);
   }
 };

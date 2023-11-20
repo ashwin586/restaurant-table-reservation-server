@@ -6,6 +6,7 @@ import {
   newPasswordCreate,
   googleSignUp,
   checkExistingUser,
+  editedUser,
 } from "../../../usecases/userUseCases/authUseCase.js";
 import {
   sendMail,
@@ -120,3 +121,14 @@ export const newPassword = async (req, res) => {
     return res.status(400).json({ message: err.message });
   }
 };
+
+export const editUser = async(req, res) => {
+  try{
+    const result = await editedUser(req.body, req.token.email);
+    if(result){
+      return res.status(200).end();
+    }
+  }catch(err){
+    console.log(err);
+  }
+}

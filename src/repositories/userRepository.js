@@ -68,9 +68,17 @@ export const saveUserProfile = async (userData, imageURL) => {
   }
 };
 
+export const editProfile = async (data, email) => {
+  try {
+    return user.findOneAndUpdate({ email: email }, data, { new: true });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const findRestaurants = async () => {
   try {
-    return await Restaurants.find({ isApproved: "Approved" });
+    return await Restaurants.find({ isApproved: "Approved", isBlocked: false });
   } catch (err) {
     console.log(err);
   }

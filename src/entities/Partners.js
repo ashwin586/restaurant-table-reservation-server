@@ -28,6 +28,10 @@ const PartnersSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  revenue: {
+    type: Number,
+    default: 0,
+  },
 });
 
 export default mongoose.model("Partners", PartnersSchema);
