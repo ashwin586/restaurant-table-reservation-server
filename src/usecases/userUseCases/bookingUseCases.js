@@ -6,6 +6,7 @@ import {
   bookingCancel,
   newReview,
   findingReview,
+  findAllReviews,
 } from "../../repositories/userRepository.js";
 
 export const tableReservation = async (data, userEmail) => {
@@ -14,7 +15,9 @@ export const tableReservation = async (data, userEmail) => {
     const userId = user._id;
     await inventoryManagment(data.cart);
     const grantTotal = data.cart.reduce((total, item) => total + item.total, 0);
-    await saveBooking(userId, data, grantTotal);
+    const partnerRevenue = 0.8 * grantTotal;
+    const adminRevenue = 0.2 * grantTotal;
+    await saveBooking(userId, data, grantTotal, partnerRevenue, adminRevenue);
     return true;
   } catch (err) {
     console.log(err);
@@ -67,6 +70,17 @@ export const findReview = async (restId, userEmail) => {
     const userId = user._id;
     const response = await findingReview(restId, userId);
     return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findreviews = async (userEmail) => {
+  try {
+    const user = await findUser(userEmail);
+    const userId = user._id;
+    const response = await findAllReviews(userId);
+    if (response) return response;
   } catch (err) {
     console.log(err);
   }

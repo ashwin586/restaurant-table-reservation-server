@@ -21,6 +21,7 @@ import {
   bookingTable,
   cancelBooking,
   fetchReview,
+  fetchReviews,
   getBookings,
   userReview,
 } from "../controllers/userController/bookingController.js";
@@ -48,4 +49,5 @@ userRoute.put("/bookingCancel", decodeToken, cancelBooking);
 userRoute.post("/bookingTable", decodeToken, bookingTable);
 userRoute.post("/userReview", decodeToken, userReview);
 userRoute.get('/fetchReview', decodeToken, fetchReview);
+userRoute.get('/fetchReviews', decodeToken, fetchReviews);
 export default userRoute;

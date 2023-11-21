@@ -3,6 +3,8 @@ import Restaurants from "../entities/Restaurants.js";
 import Menu from "../entities/Menus.js";
 import Booking from "../entities/Booking.js";
 import Reviews from "../entities/Reviews.js";
+import Partners from "../entities/Partners.js";
+import Admin from "../entities/Admin.js";
 
 export const saveUser = async (userData) => {
   try {
@@ -78,7 +80,20 @@ export const editProfile = async (data, email) => {
 
 export const findRestaurants = async () => {
   try {
-    return await Restaurants.find({ isApproved: "Approved", isBlocked: false });
+    const restaurants = await Restaurants.find({
+      isApproved: "Approved",
+      isBlocked: false,
+    });
+    const populatedRestaurants = await Promise.all(
+      restaurants.map(async (restaurant) => {
+        const populatedRestaurant = restaurant.toJSON();
+        populatedRestaurant.reviews = await Reviews.find({
+          restaurant: restaurant._id,
+        });
+        return populatedRestaurant;
+      })
+    );
+    return populatedRestaurants;
   } catch (err) {
     console.log(err);
   }
@@ -100,6 +115,14 @@ export const restaurantMenus = async (id) => {
   }
 };
 
+export const restaurantReviews = async (id) => {
+  try {
+    return await Reviews.find({ restaurant: id });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const inventoryManagment = async (cart) => {
   try {
     for (const item of cart) {
@@ -115,7 +138,13 @@ export const inventoryManagment = async (cart) => {
   }
 };
 
-export const saveBooking = async (userId, data, total) => {
+export const saveBooking = async (
+  userId,
+  data,
+  total,
+  partnerRevenue,
+  adminRevenue
+) => {
   try {
     const cartItems = data.cart.map((item) => ({
       menu: item.id,
@@ -132,6 +161,15 @@ export const saveBooking = async (userId, data, total) => {
       bookedTime: data.date.dateTime,
       grandTotal: total,
     });
+    const restaurant = await Restaurants.findById(newBooking.restaurant);
+    if (restaurant) {
+      await Partners.findByIdAndUpdate(
+        restaurant.partner,
+        { $inc: { revenue: partnerRevenue } },
+        { $new: true }
+      );
+    }
+    // await Admin.findOneAndUpdate();
     return await newBooking.save();
   } catch (err) {
     console.log(err);
@@ -225,6 +263,14 @@ export const newReview = async (rating, textReview, restId, userId) => {
 export const findingReview = async (restId, userId) => {
   try {
     return await Reviews.findOne({ user: userId, restaurant: restId });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findAllReviews = async (userId) => {
+  try {
+    return await Reviews.find({ user: userId }).populate("restaurant");
   } catch (err) {
     console.log(err);
   }

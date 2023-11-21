@@ -6,7 +6,7 @@ export const findRestaurant = async (req, res) => {
     if (result) {
       return res
         .status(200)
-        .json({ restaurant: result.restaurantDetails, menus: result.menus });
+        .json({ restaurant: result.restaurantDetails, menus: result.menus, reviews: result.reviews });
     }
   } catch (err) {
     console.log(err);

@@ -1,7 +1,29 @@
+import Admin from "../entities/Admin.js";
 import Partners from "../entities/Partners.js";
 import Restaurants from "../entities/Restaurants.js";
 import Cuisines from "../entities/cuisine.js";
 import Categories from "../entities/menuCategories.js";
+
+export const saveNewAdmin = async (data) => {
+  try {
+    const newAdmin = new Admin({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
+    return newAdmin.save();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findAdmin = async (adminEmail) => {
+  try {
+    return await Admin.findOne({ email: adminEmail }).exec();
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const findAllPartners = async () => {
   try {
@@ -97,18 +119,18 @@ export const saveCategory = async (data) => {
   }
 };
 
-export const findAllCategory = async() => {
-  try{
+export const findAllCategory = async () => {
+  try {
     return await Categories.find();
-  }catch(err){
-    console.log(err)
+  } catch (err) {
+    console.log(err);
   }
-}
+};
 
-export const deletecategory = async(id) => {
-  try{
-    return await Categories.findByIdAndDelete(id)
-  }catch(err){
-    console.log(err)
+export const deletecategory = async (id) => {
+  try {
+    return await Categories.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
   }
-}
+};
