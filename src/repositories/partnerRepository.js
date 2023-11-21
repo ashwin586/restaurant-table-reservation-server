@@ -4,6 +4,7 @@ import Cuisines from "../entities/cuisine.js";
 import Categories from "../entities/menuCategories.js";
 import Menu from "../entities/Menus.js";
 import Bookings from "../entities/Booking.js";
+import Reviews from "../entities/Reviews.js";
 
 export const savePartner = async (data, hashedPassword) => {
   try {
@@ -181,6 +182,37 @@ export const partnerSave = async (data, number) => {
       },
       { new: true }
     );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const partnerTotalReviewCount = async (restaurantIds) => {
+  try {
+    const totalCount = await Reviews.countDocuments({
+      restaurant: { $in: restaurantIds },
+    });
+    return totalCount;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const totalBookings = async (restaurantIds) => {
+  try {
+    const totalbooking = await Bookings.countDocuments({
+      restaurant: { $in: restaurantIds },
+    });
+    return totalbooking;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const chartData = async (restaurantIds) => {
+  try {
+    const data = await Bookings.find({restaurant: {$in: restaurantIds}});
+    return data
   } catch (err) {
     console.log(err);
   }

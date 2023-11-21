@@ -34,6 +34,7 @@ import {
   getAllCategory,
   removeCategory,
 } from "../controllers/adminController/AdminCategoryController.js";
+import { fetchDetails } from "../controllers/adminController/adminDashboardController.js";
 
 const adminRoutes = Router();
 
@@ -62,4 +63,5 @@ adminRoutes.post("/addCategory", adminCheck, addCategory);
 adminRoutes.get("/getAllCategory", adminCheck, getAllCategory);
 adminRoutes.delete("/deleteCategory", adminCheck, removeCategory);
 
+adminRoutes.get('/dashboard', adminCheck, fetchDetails)
 export default adminRoutes;

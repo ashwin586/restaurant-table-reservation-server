@@ -1,8 +1,10 @@
 import Admin from "../entities/Admin.js";
+import Booking from "../entities/Booking.js";
 import Partners from "../entities/Partners.js";
 import Restaurants from "../entities/Restaurants.js";
 import Cuisines from "../entities/cuisine.js";
 import Categories from "../entities/menuCategories.js";
+import users from "../entities/user.js";
 
 export const saveNewAdmin = async (data) => {
   try {
@@ -130,6 +132,53 @@ export const findAllCategory = async () => {
 export const deletecategory = async (id) => {
   try {
     return await Categories.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const userCount = async () => {
+  try {
+    return await users.countDocuments({ accountStatus: false });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const restaurantOnline = async () => {
+  try {
+    return await Restaurants.countDocuments({ isBlocked: false });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const totalrevenue = async () => {
+  try {
+    const admin = await Admin.findOne();
+    const revenue = admin.revenue;
+    return revenue;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const partnerCount = async () => {
+  try {
+    return await Partners.countDocuments({ accountStatus: false });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const chartDetails = async () => {
+  try {
+    const restaurants = await Restaurants.find();
+    const restaurantIds = restaurants.map((restaurant) => restaurant._id);
+    const bookings = await Booking.find({
+      restaurant: { $in: restaurantIds },
+    });
+    return bookings;
   } catch (err) {
     console.log(err);
   }

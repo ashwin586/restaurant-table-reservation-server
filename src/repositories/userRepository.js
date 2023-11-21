@@ -169,7 +169,7 @@ export const saveBooking = async (
         { $new: true }
       );
     }
-    // await Admin.findOneAndUpdate();
+    await Admin.findOneAndUpdate({ $inc: { revenue: adminRevenue } });
     return await newBooking.save();
   } catch (err) {
     console.log(err);

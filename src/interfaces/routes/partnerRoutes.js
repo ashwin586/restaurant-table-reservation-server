@@ -18,6 +18,7 @@ import {
   findAllMenus
 } from "../controllers/partnerController/partnerMenuController.js";
 import { fetchAllOrders } from "../controllers/partnerController/partnerOrderController.js";
+import { fetchAllDetails } from "../controllers/partnerController/partnerDashboardController.js";
 
 const partnerRoutes = Router();
 
@@ -39,4 +40,5 @@ partnerRoutes.get('/fetchAllMenus', decodePartnerToken, findAllMenus);
 partnerRoutes.put('/editMenu', decodePartnerToken, editedMenu)
 
 partnerRoutes.get('/getAllOrdersOfRestaurant', decodePartnerToken, fetchAllOrders)
+partnerRoutes.get('/dashboard', decodePartnerToken, fetchAllDetails);
 export default partnerRoutes;
