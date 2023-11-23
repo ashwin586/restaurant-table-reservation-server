@@ -29,7 +29,7 @@ export const findAdmin = async (adminEmail) => {
 
 export const findAllPartners = async () => {
   try {
-    return await Partners.find().lean();
+    return await Partners.find().lean().sort({ _id: -1 });
   } catch (err) {
     console.log(err);
   }
@@ -62,6 +62,38 @@ export const findAllRestaurants = async () => {
 export const findRestaurantWithId = async (id) => {
   try {
     return await Restaurants.findById(id);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const findAllUsers = async () => {
+  try {
+    return await users.find().sort({ registerDate: -1 });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const blockTheUser = async (id) => {
+  try {
+    return await users.findByIdAndUpdate(
+      id,
+      { accountStatus: true },
+      { new: true }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const unBlockTheUser = async (id) => {
+  try {
+    return await users.findByIdAndUpdate(
+      id,
+      { accountStatus: false },
+      { new: true }
+    );
   } catch (err) {
     console.log(err);
   }

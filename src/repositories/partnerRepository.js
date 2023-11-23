@@ -59,7 +59,9 @@ export const findAllCuisines = async () => {
 
 export const allRestaurant = async (id) => {
   try {
-    return await Restaurants.find({ partner: id }).populate("cuisine");
+    return await Restaurants.find({ partner: id })
+      .populate("cuisine")
+      .sort({ _id: -1 });
   } catch (err) {
     console.log(err);
   }
@@ -161,7 +163,7 @@ export const findAllOrders = async (id) => {
         path: "cart.menu",
         model: "Menu",
         select: "name quantity price imageURL",
-      });
+      }).sort({_id: -1});
     return orders;
   } catch (err) {
     console.log(err);
@@ -211,8 +213,8 @@ export const totalBookings = async (restaurantIds) => {
 
 export const chartData = async (restaurantIds) => {
   try {
-    const data = await Bookings.find({restaurant: {$in: restaurantIds}});
-    return data
+    const data = await Bookings.find({ restaurant: { $in: restaurantIds } });
+    return data;
   } catch (err) {
     console.log(err);
   }

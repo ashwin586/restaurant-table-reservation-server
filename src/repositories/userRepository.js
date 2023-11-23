@@ -206,7 +206,7 @@ export const findBookings = async (email) => {
           "userBookings.email": email,
         },
       },
-    ]);
+    ]).sort({ _id: -1 });
     return result;
   } catch (err) {
     console.log(err);

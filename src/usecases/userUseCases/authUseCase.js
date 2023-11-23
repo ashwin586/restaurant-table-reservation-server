@@ -32,12 +32,14 @@ export const userData = async (userDetails) => {
 
 export const googleSignUp = async (name, email) => {
   try {
+    const existingUser = await findUser(email)
+    if(existingUser) throw new Error('This email already used')
     const response = await saveGoogleData(name, email);
     if (response) {
       return true;
     }
   } catch (err) {
-    console.log(err);
+    throw new Error(err.message)
   }
 };
 
@@ -73,11 +75,12 @@ export const checkExistingUser = async (email) => {
     const user = await findUser(email);
     if (!user) throw new Error("Email not registered");
     if (user) {
+      if(user.accountStatus) throw new Error('Account has been blocked by the admin');
       const userToken = await generateUserToken(email);
       return { userToken };
     }
   } catch (err) {
-    throw new Error(err.messasge);
+    throw new Error(err.message);
   }
 };
 

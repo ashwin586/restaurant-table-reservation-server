@@ -1,8 +1,9 @@
-import user from "../../entities/user.js";
+import { blockTheUser, findAllUsers, unBlockTheUser } from "../../repositories/adminRepository.js";
 
-export const findAllUsers = async () => {
+export const fetchallusers = async () => {
   try {
-    return await user.find().lean();
+    const response = await findAllUsers()
+    if(response) return response;
   } catch (err) {
     console.log(err);
   }
@@ -10,12 +11,8 @@ export const findAllUsers = async () => {
 
 export const blockuser = async (id) => {
   try {
-    const User = await user.findByIdAndUpdate(
-      id,
-      { accountStatus: true },
-      { new: true }
-    );
-    return User;
+    const response = await blockTheUser(id);
+    if(response) return response;
   } catch (err) {
     console.log(err);
   }
@@ -23,11 +20,8 @@ export const blockuser = async (id) => {
 
 export const unblockuser = async (id) => {
   try {
-    return await user.findByIdAndUpdate(
-      id,
-      { accountStatus: false },
-      { new: true }
-    );
+    const response = await unBlockTheUser(id)
+    if(response) return response;
   } catch (err) {
     console.log(err);
   }

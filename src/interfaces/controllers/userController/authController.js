@@ -54,7 +54,7 @@ export const googleRegister = async (req, res) => {
       return res.status(200).end();
     }
   } catch (err) {
-    console.log(err);
+    return res.status(400).json(err.message)
   }
 };
 
@@ -76,7 +76,7 @@ export const googleLogin = async (req, res) => {
       return res.status(200).json({userToken: result.userToken});
     }
   } catch (err) {
-    console.log(err);
+    return res.status(400).json(err.message);
   }
 };
 

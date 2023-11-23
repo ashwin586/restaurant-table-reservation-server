@@ -2,7 +2,7 @@ import { verifyLogin, verifyRegister } from "../../../usecases/partnerUseCases/p
 
 export const partnerRegister = async (req, res) => {
     try{
-        const result = await verifyRegister(req.body.values)
+        const result = await verifyRegister(req.body.data)
         return res.status(200).json({message: 'Registration successfull'});
     }catch(err){
         console.log(err)

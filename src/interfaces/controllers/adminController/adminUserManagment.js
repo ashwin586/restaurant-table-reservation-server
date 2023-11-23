@@ -1,8 +1,8 @@
-import { blockuser, findAllUsers, unblockuser } from "../../../usecases/adminUseCases/adminUserUseCases.js";
+import { blockuser, fetchallusers, unblockuser } from "../../../usecases/adminUseCases/adminUserUseCases.js";
 
 export const findUsers = async(req, res) => {
     try{
-        const response = await findAllUsers();
+        const response = await fetchallusers();
         return res.json(response);
     }catch(err){
         console.log(err);
