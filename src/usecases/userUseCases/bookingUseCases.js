@@ -7,7 +7,30 @@ import {
   newReview,
   findingReview,
   findAllReviews,
+  periodBookings,
+  findRestById,
 } from "../../repositories/userRepository.js";
+
+export const bookingAvailablity = async (data) => {
+  try {
+    const { restaurantId, selectedSeats, bookingDate, bookingTime } = data;
+    const restaurant = await findRestById(restaurantId)
+    const existingBookings = await periodBookings(
+      restaurantId,
+      bookingDate,
+      bookingTime
+    );
+    const totalSeatsBooked = existingBookings.reduce(
+      (total, booking) => total + booking.numberOfSeats,
+      0
+    );
+    const availableSeats = restaurant.seats - totalSeatsBooked;
+    if(selectedSeats > availableSeats) throw new Error('No seats available during this time')
+    else return true
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
 
 export const tableReservation = async (data, userEmail) => {
   try {

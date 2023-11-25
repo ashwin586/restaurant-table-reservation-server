@@ -1,4 +1,5 @@
 import {
+  bookingAvailablity,
   cancellingBooking,
   fetchBookings,
   findReview,
@@ -6,6 +7,17 @@ import {
   savingReview,
   tableReservation,
 } from "../../../usecases/userUseCases/bookingUseCases.js";
+
+export const checkAvailablity = async (req, res) => {
+  try {
+    const result = await bookingAvailablity(req.query);
+    if (result) {
+      return res.status(200).end();
+    }
+  } catch (err) {
+    return res.status(400).json(err.message);
+  }
+};
 
 export const bookingTable = async (req, res) => {
   try {
@@ -67,11 +79,11 @@ export const fetchReview = async (req, res) => {
   }
 };
 
-export const fetchReviews = async(req, res) => {
-  try{
+export const fetchReviews = async (req, res) => {
+  try {
     const result = await findreviews(req.token.email);
-    if(result) return res.status(200).json(result);
-  }catch(err){
-    console.log(err)
+    if (result) return res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
   }
-}
+};

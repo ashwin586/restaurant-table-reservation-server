@@ -176,6 +176,19 @@ export const saveBooking = async (
   }
 };
 
+export const periodBookings = async (restaurantId, bookedDate, bookedTime) => {
+  try{
+    return await Booking.find({
+      restaurant: restaurantId,
+      bookedDate,
+      bookedTime,
+      orderStatus: "Ordered"
+    })
+  }catch(err){
+    cosnoel.log(err)
+  }
+}
+
 export const findBookings = async (email) => {
   try {
     const result = await Booking.aggregate([

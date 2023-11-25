@@ -85,6 +85,7 @@ export const saveEditedRestaurant = async (restaurant) => {
           cuisine: restaurant.cuisine,
           openTime: restaurant.opens,
           closeTime: restaurant.closes,
+          seats: restaurant.seats,
           address: restaurant.address,
           city: restaurant.city,
           pinCode: restaurant.pinCode,
@@ -117,6 +118,7 @@ export const savingMenu = async (data, id) => {
       foodCategory: data.foodType,
       quantity: data.quantity,
       price: data.price,
+      category: data.category,
       imageURL: data.imageURL,
       restaurant: id,
     });
@@ -141,7 +143,8 @@ export const saveEditedMenu = async (newMenu, id) => {
       {
         $set: {
           name: newMenu.name,
-          foodCategory: newMenu.category,
+          foodCategory: newMenu.foodCategory,
+          category: newMenu.category,
           quantity: newMenu.quantity,
           price: newMenu.price,
           imageURL: newMenu.imageURL,

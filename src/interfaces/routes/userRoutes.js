@@ -20,6 +20,7 @@ import { findRestaurant } from "../controllers/userController/restaurantControll
 import {
   bookingTable,
   cancelBooking,
+  checkAvailablity,
   fetchReview,
   fetchReviews,
   getBookings,
@@ -43,8 +44,10 @@ userRoute.put('/editUser', decodeToken, editUser);
 
 userRoute.get("/getAllRestaurants", findAllRestaurants);
 userRoute.get("/getRestaurantDetails", findRestaurant);
+userRoute.get('/seatAvailablity', checkAvailablity);
 userRoute.get("/getBookings", decodeToken, getBookings);
 userRoute.put("/bookingCancel", decodeToken, cancelBooking);
+
 
 userRoute.post("/bookingTable", decodeToken, bookingTable);
 userRoute.post("/userReview", decodeToken, userReview);
