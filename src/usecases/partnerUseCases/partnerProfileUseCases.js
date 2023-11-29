@@ -2,6 +2,7 @@ import {
   findPartner,
   partnerSave,
 } from "../../repositories/partnerRepository.js";
+import { securePassword } from "../../services/bcrypt.js";
 
 export const fetchPartner = async (number) => {
   try {
@@ -13,8 +14,8 @@ export const fetchPartner = async (number) => {
 
 export const editPartner = async (data, number) => {
   try {
-    const response = await partnerSave(data, number);
-    console.log(response);
+    const hashedPassword = await securePassword(data.passwordone);
+    const response = await partnerSave(data, number, hashedPassword);
     if (response) {
       return true;
     }

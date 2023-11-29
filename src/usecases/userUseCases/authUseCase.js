@@ -126,7 +126,6 @@ export const newPasswordCreate = async (password, email) => {
 export const editedUser = async (data, email) => {
   try {
     const { name, phoneNumber, password } = data;
-    console.log(name, phoneNumber, password);
     const userObj = { name, phoneNumber };
     if (password) {
       const hashedPassword = await securePassword(password);

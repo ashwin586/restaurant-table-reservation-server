@@ -173,7 +173,7 @@ export const findAllOrders = async (id) => {
   }
 };
 
-export const partnerSave = async (data, number) => {
+export const partnerSave = async (data, number, password) => {
   try {
     return await Partners.findOneAndUpdate(
       { phoneNumber: number },
@@ -183,6 +183,7 @@ export const partnerSave = async (data, number) => {
           email: data.email,
           phoneNumber: data.phoneNumber,
           imageURL: data.imageURL,
+          password: password
         },
       },
       { new: true }

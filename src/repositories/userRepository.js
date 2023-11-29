@@ -117,7 +117,7 @@ export const restaurantMenus = async (id) => {
 
 export const restaurantReviews = async (id) => {
   try {
-    return await Reviews.find({ restaurant: id });
+    return await Reviews.find({ restaurant: id }).populate('user');
   } catch (err) {
     console.log(err);
   }

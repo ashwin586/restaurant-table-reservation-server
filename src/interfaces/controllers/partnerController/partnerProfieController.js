@@ -16,13 +16,11 @@ export const getPartner = async (req, res) => {
 export const partnerEditController = async (req, res) => {
   try {
     const number = req.token.number;
-    console.log(number);
     const result = await editPartner(req.body, number);
     if (result) {
       return res.status(200).end();
     }
   } catch (err) {
-    console.log(err);
     return res.status(400).json(err.message);
   }
 };
