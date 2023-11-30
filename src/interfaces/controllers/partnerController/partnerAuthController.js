@@ -1,4 +1,5 @@
 import {
+  recoverpassword,
   verifyLogin,
   verifyRegister,
 } from "../../../usecases/partnerUseCases/partnerAuthUseCase.js";
@@ -27,8 +28,11 @@ export const partnerLogin = async (req, res) => {
 
 export const recoverPassword = async (req, res) => {
   try {
-    console.log('came')
-    console.log(req.body);
+    const phoneNumber = req.body.phoneNumber;
+    const result = await recoverpassword(phoneNumber);
+    if (result) {
+      return res.status(200).json({ partnerToken: result });
+    }
   } catch (err) {
     console.log(err);
   }
