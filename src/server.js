@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import connectDB from "./config/mongo.js";
 import cors from "cors";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import userRoute from "./interfaces/routes/userRoutes.js";
 import adminRoutes from "./interfaces/routes/adminRoutes.js";
 import { v4 as uuidv4 } from "uuid";
