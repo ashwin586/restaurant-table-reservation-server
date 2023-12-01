@@ -5,7 +5,7 @@ dotenv.config();
 // HANDLING ADMIN TOKEN
 export const generateAdminToken = async (email) => {
   try {
-    return Jwt.sign(email, process.env.JWTSECRETKEY);
+    return Jwt.sign(email, '5f7Jp2Rt9QcXnYzA8sEw6vGhKuLmW3oV1iBd4');
   } catch (err) {
     console.log(err);
   }
@@ -17,7 +17,7 @@ export const adminCheck = async (req, res, next) => {
     res.status(401).json({ message: "Unauthorised Access" });
   } else {
     try {
-      Jwt.verify(token, process.env.JWTSECRETKEY);
+      Jwt.verify(token, '5f7Jp2Rt9QcXnYzA8sEw6vGhKuLmW3oV1iBd4');
       next();
     } catch (err) {
       console.log(err);
@@ -31,7 +31,7 @@ export const generateUserToken = async (email) => {
     const payload = {
       email: email,
     };
-    return Jwt.sign(payload, process.env.JWTSECRETKEY);
+    return Jwt.sign(payload, '5f7Jp2Rt9QcXnYzA8sEw6vGhKuLmW3oV1iBd4');
   } catch (err) {
     console.log(err);
   }
@@ -40,7 +40,7 @@ export const generateUserToken = async (email) => {
 export const decodeToken = async (req, res, next) => {
   const token = req.headers.authorization?.trim().split(" ")[1];
   try {
-    Jwt.verify(token, process.env.JWTSECRETKEY, (err, decodedToken) => {
+    Jwt.verify(token, '5f7Jp2Rt9QcXnYzA8sEw6vGhKuLmW3oV1iBd4', (err, decodedToken) => {
       if (err) {
         return res.status(401).json({ message: "Unauthorized Access" });
       }
@@ -58,7 +58,7 @@ export const generatePartnerToken = async (number) =>{
     const payload = {
       number: number
     }
-    return Jwt.sign(payload, process.env.JWTSECRETKEY);
+    return Jwt.sign(payload, '5f7Jp2Rt9QcXnYzA8sEw6vGhKuLmW3oV1iBd4');
   }catch(err){
     console.log(err);
   }
@@ -67,7 +67,7 @@ export const generatePartnerToken = async (number) =>{
 export const decodePartnerToken = async (req, res, next) => {
   try{
     const token = req.headers.authorization?.trim().split(" ")[1];
-    Jwt.verify(token, process.env.JWTSECRETKEY, (err, decodedToken) => {
+    Jwt.verify(token, '5f7Jp2Rt9QcXnYzA8sEw6vGhKuLmW3oV1iBd4', (err, decodedToken) => {
       if(err){
         return res.status(401).json({message: 'Unauthorized Access'})
       }
