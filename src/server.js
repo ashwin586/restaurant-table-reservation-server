@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import partnerRoutes from "./interfaces/routes/partnerRoutes.js";
 dotenv.config();
 
-const allowedOrigins = [process.env.ALLOWEDORIGINS];
+const allowedOrigins = ['https://d2y3w40euj04vp.cloudfront.net/'];
 
 const app = express();
 
