@@ -47,6 +47,10 @@ app.use("/admin", adminRoutes);
 app.use('/partner', partnerRoutes);
 connectDB();
 
-app.listen(process.env.PORT, () => {
-  console.log(`server is connected to the port ${process.env.PORT}`);
+// app.listen(process.env.PORT, () => {
+//   console.log(`server is connected to the port ${process.env.PORT}`);
+// });
+
+app.listen(5000, () => {
+  console.log(`server is connected to the port ${5000}`);
 });
