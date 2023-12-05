@@ -16,6 +16,6 @@ export const userImage = async (req, res) =>{
         await updateProfileImage(imageURL, userId)
         return res.status(200).end();
     }catch(err){
-        console.log(err);
+        return res.status(400).json(err.message);
     }
 }

@@ -137,3 +137,13 @@ export const editedUser = async (data, email) => {
     console.log(err);
   }
 };
+
+export const existingUserStatus = async(email) => {
+  try{
+    const user = await findUser(email);
+    if(!user.accountStatus) return true
+    else throw new Error('Something went wrong');
+  }catch(err){
+    throw new Error(err.message);
+  }
+}

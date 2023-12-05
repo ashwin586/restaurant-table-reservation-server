@@ -7,6 +7,7 @@ import {
   googleSignUp,
   checkExistingUser,
   editedUser,
+  existingUserStatus,
 } from "../../../usecases/userUseCases/authUseCase.js";
 import {
   sendMail,
@@ -54,7 +55,7 @@ export const googleRegister = async (req, res) => {
       return res.status(200).end();
     }
   } catch (err) {
-    return res.status(400).json(err.message)
+    return res.status(400).json(err.message);
   }
 };
 
@@ -71,9 +72,9 @@ export const login = async (req, res) => {
 
 export const googleLogin = async (req, res) => {
   try {
-    const result = await checkExistingUser(req.body.email)
-    if(result.userToken){
-      return res.status(200).json({userToken: result.userToken});
+    const result = await checkExistingUser(req.body.email);
+    if (result.userToken) {
+      return res.status(200).json({ userToken: result.userToken });
     }
   } catch (err) {
     return res.status(400).json(err.message);
@@ -122,13 +123,22 @@ export const newPassword = async (req, res) => {
   }
 };
 
-export const editUser = async(req, res) => {
-  try{
+export const editUser = async (req, res) => {
+  try {
     const result = await editedUser(req.body, req.token.email);
-    if(result){
+    if (result) {
       return res.status(200).end();
     }
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
+};
+
+export const checkUserStatus = async (req, res) => {
+  try {
+    const result = await existingUserStatus(req.token.email);
+    if (result) return res.status(200).end();
+  } catch (err) {
+    return res.status(400).json(err.message);
+  }
+};

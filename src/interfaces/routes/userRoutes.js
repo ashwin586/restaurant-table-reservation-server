@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  checkUserStatus,
   editUser,
   emailVerify,
   googleLogin,
@@ -38,6 +39,7 @@ userRoute.post("/google/signup", googleRegister);
 userRoute.post("/google/login", googleLogin);
 
 userRoute.post("/savenewpassword", newPassword);
+userRoute.get('/checkuser', decodeToken, checkUserStatus)
 userRoute.get("/getuserprofile", decodeToken, fetchProfile);
 userRoute.post("/uploadProfilePicture", decodeToken, userImage);
 userRoute.put('/editUser', decodeToken, editUser);
