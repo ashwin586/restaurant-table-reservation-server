@@ -15,6 +15,8 @@ import {
   storeData,
 } from "../../../services/nodemailer.js";
 
+import { Validator } from "node-input-validator";
+
 export const sendOtp = async (req, res) => {
   try {
     const otp = generateOtp();
@@ -31,6 +33,15 @@ export const sendOtp = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
+    const validation = new Validator(req.body, {
+      name: "required|minLength:3",
+      phoneNumber: "required|maxLength:10",
+      email: "required|email",
+      password: "required",
+    });
+
+    const matched = await validation.check();
+    if (!matched) throw Error("Please fill all the fields correctly");
     const { name, phoneNumber, email, password } = req.body;
     const userDetails = {
       name,
@@ -38,6 +49,7 @@ export const register = async (req, res) => {
       email,
       password,
     };
+
     const response = await userData(userDetails);
     if (response) {
       return res.status(200).end();
@@ -61,6 +73,12 @@ export const googleRegister = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
+    const v = new Validator(req.body, {
+      email: "required|email",
+      password: "required",
+    });
+    const matched = await v.check();
+    if (!matched) throw Error("Invalid email and password");
     const response = await checkUserInfo(req.body);
     if (response) {
       return res.status(200).json({ userToken: response.userToken });
@@ -95,6 +113,7 @@ export const emailVerify = async (req, res) => {
       return res.status(200).end();
     }
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: err.message });
   }
 };
