@@ -22,13 +22,13 @@ export const sendMail = async (email, subject, text) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: 'ashwinv586@gmail.com',
-        pass: 'iiqmjuyngbzqwbcy',
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS,
       },
     });
 
     const mailOptions = {
-      from: 'ashwinv586@gmail.com',
+      from: process.env.NODEMAILER_USER,
       to: email,
       subject: subject,
       text: text,
