@@ -147,21 +147,6 @@ export const userOtp = async (otp, email) => {
   }
 };
 
-export const editedUser = async (data, email) => {
-  try {
-    const { name, phoneNumber, password } = data;
-    const userObj = { name, phoneNumber };
-    if (password) {
-      const hashedPassword = await securePassword(password);
-      userObj.password = hashedPassword;
-    }
-    const response = await editProfile(userObj, email);
-    if (response) return true;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 export const existingUserStatus = async (email) => {
   try {
     const user = await findUser(email);

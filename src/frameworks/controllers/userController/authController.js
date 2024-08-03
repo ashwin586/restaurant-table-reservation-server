@@ -1,7 +1,6 @@
 import {
   checkUser,
   userOtp,
-  editedUser,
   existingUserStatus,
 } from "../../../domain/usecases/userUseCases/authUseCase.js";
 import {
@@ -151,16 +150,7 @@ export const otpVerify = async (req, res) => {
   }
 };
 
-export const editUser = async (req, res) => {
-  try {
-    const result = await editedUser(req.body, req.token.email);
-    if (result) {
-      return res.status(200).end();
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+
 
 export const checkUserStatus = async (req, res) => {
   try {

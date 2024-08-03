@@ -23,6 +23,16 @@ export const userRepository = {
       return err;
     }
   },
+
+  findById: async (id) => {
+    try {
+      return await user.findById(id);
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  },
+
   updateUser: async (userId, updatedUserData) => {
     try {
       return await user.findByIdAndUpdate(userId, updatedUserData, {
@@ -34,36 +44,6 @@ export const userRepository = {
   },
 };
 
-export const saveGoogleData = async (name, email) => {
-  try {
-    const newUser = new user({
-      name: name,
-      email: email,
-    });
-    return await newUser.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const saveUserProfile = async (userData, imageURL) => {
-  try {
-    if (imageURL) {
-      userData.userImage = imageURL;
-      return await userData.save();
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const editProfile = async (data, email) => {
-  try {
-    return user.findOneAndUpdate({ email: email }, data, { new: true });
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 export const findRestaurants = async () => {
   try {
