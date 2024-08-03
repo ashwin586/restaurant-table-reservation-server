@@ -3,10 +3,10 @@ import session from "express-session";
 import connectDB from "./config/mongo.js";
 import cors from "cors";
 import * as dotenv from "dotenv";
-import userRoute from "./interfaces/routes/userRoutes.js";
-import adminRoutes from "./interfaces/routes/adminRoutes.js";
+import userRoute from "./frameworks/routes/userRoutes.js";
+import adminRoutes from "./frameworks/routes/adminRoutes.js";
 import { v4 as uuidv4 } from "uuid";
-import partnerRoutes from "./interfaces/routes/partnerRoutes.js";
+import partnerRoutes from "./frameworks/routes/partnerRoutes.js";
 dotenv.config();
 
 const allowedOrigins = [process.env.HOSTEDORIGIN];
@@ -42,10 +42,9 @@ app.use(
   })
 );
 
-
 app.use("/", userRoute);
 app.use("/admin", adminRoutes);
-app.use('/partner', partnerRoutes);
+app.use("/partner", partnerRoutes);
 connectDB();
 
 app.listen(process.env.PORT, () => {
