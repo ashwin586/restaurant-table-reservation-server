@@ -6,8 +6,7 @@ import {
   sendOtp,
 } from "../controllers/userController/authController.js";
 import { decodeToken } from "../middlewares/jwtAuth.js";
-import { findAllRestaurants } from "../controllers/userController/homeContoller.js";
-import { findRestaurant } from "../controllers/userController/restaurantController.js";
+
 import {
   bookingTable,
   cancelBooking,
@@ -20,6 +19,7 @@ import {
 
 import { userAuthControllers } from "../controllers/userController/authController.js";
 import { userProfileControllers } from "../controllers/userController/profileController.js";
+import { userRestaurantControllers } from "../controllers/userController/restaurantController.js";
 
 const userRoute = Router();
 
@@ -33,12 +33,26 @@ userRoute.post("/google/login", userAuthControllers.googleLogin);
 userRoute.post("/forgotpassword", userAuthControllers.forgotPassword);
 
 // userRoute.get("/checkuser", decodeToken, checkUserStatus);
-userRoute.get("/getuserprofile", decodeToken, userProfileControllers.fetchProfile);
-userRoute.post("/uploadProfilePicture", decodeToken, userProfileControllers.editUserImage);
+userRoute.get(
+  "/getuserprofile",
+  decodeToken,
+  userProfileControllers.fetchProfile
+);
+userRoute.post(
+  "/uploadProfilePicture",
+  decodeToken,
+  userProfileControllers.editUserImage
+);
 userRoute.put("/editUser", decodeToken, userProfileControllers.editUser);
 
-userRoute.get("/getAllRestaurants", findAllRestaurants);
-userRoute.get("/getRestaurantDetails", findRestaurant);
+userRoute.get(
+  "/getAllRestaurants",
+  userRestaurantControllers.findAllRestaurants
+);
+userRoute.get(
+  "/getRestaurantDetails",
+  userRestaurantControllers.findRestaurant
+);
 userRoute.get("/seatAvailablity", checkAvailablity);
 userRoute.get("/getBookings", decodeToken, getBookings);
 userRoute.put("/bookingCancel", decodeToken, cancelBooking);

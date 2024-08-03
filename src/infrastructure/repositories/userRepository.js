@@ -12,15 +12,14 @@ export const userRepository = {
       const userModel = new user(User);
       await userModel.save();
     } catch (err) {
-      console.log(err);
+      throw new Error(err);
     }
   },
   findByEmail: async (email) => {
     try {
       return await user.findOne({ email });
     } catch (err) {
-      console.log(err);
-      return err;
+      throw new Error(err);
     }
   },
 
@@ -28,8 +27,7 @@ export const userRepository = {
     try {
       return await user.findById(id);
     } catch (error) {
-      console.log(error);
-      return error;
+      throw new Error(error);
     }
   },
 
@@ -39,55 +37,45 @@ export const userRepository = {
         new: true,
       });
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   },
-};
 
+  fetchAllRestaurants: async () => {
+    try {
+      const restaurants = await Restaurants.find({
+        isApproved: "Approved",
+        isBlocked: false,
+      });
+      const populatedRestaurants = await Promise.all(
+        restaurants.map(async (restaurant) => {
+          const populatedRestaurant = restaurant.toJSON();
+          populatedRestaurant.reviews = await Reviews.find({
+            restaurant: restaurant._id,
+          });
+          return populatedRestaurant;
+        })
+      );
+      return populatedRestaurants;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-export const findRestaurants = async () => {
-  try {
-    const restaurants = await Restaurants.find({
-      isApproved: "Approved",
-      isBlocked: false,
-    });
-    const populatedRestaurants = await Promise.all(
-      restaurants.map(async (restaurant) => {
-        const populatedRestaurant = restaurant.toJSON();
-        populatedRestaurant.reviews = await Reviews.find({
-          restaurant: restaurant._id,
-        });
-        return populatedRestaurant;
-      })
-    );
-    return populatedRestaurants;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findRestById = async (id) => {
-  try {
-    return await Restaurants.findById(id).populate("cuisine");
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const restaurantMenus = async (id) => {
-  try {
-    return await Menu.find({ restaurant: id }).populate("foodCategory");
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const restaurantReviews = async (id) => {
-  try {
-    return await Reviews.find({ restaurant: id }).populate("user");
-  } catch (err) {
-    console.log(err);
-  }
+  fetchRestaurantDetails: async (id) => {
+    try {
+      const restaurantDetails = await Restaurants.findById(id).populate({
+        path: "cuisine",
+      });
+      const menus = await Menu.find({ restaurant: id }).populate(
+        "foodCategory"
+      );
+      const reviews = await Reviews.find({ restaurant: id }).populate("user");
+      return { restaurantDetails, menus, reviews };
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
 
 export const inventoryManagment = async (cart) => {
