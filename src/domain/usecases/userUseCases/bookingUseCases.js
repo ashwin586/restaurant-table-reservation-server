@@ -5,7 +5,6 @@ export const userBookingUseCases = (userRepository) => ({
       const { restaurantDetails } = await userRepository.fetchRestaurantDetails(
         restaurantId
       );
-      console.log(restaurantDetails);
       const existingBookings = await userRepository.periodBookings(
         restaurantId,
         bookingDate,

@@ -143,7 +143,7 @@ export const userRepository = {
     }
   },
 
-  savebooking: async (userId, data, total, partnerRevenue, adminRevenue) => {
+  saveBooking: async (userId, data, total, partnerRevenue, adminRevenue) => {
     try {
       const cartItems = data.cart.map((item) => ({
         menu: item.id,

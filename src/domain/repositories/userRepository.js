@@ -9,7 +9,7 @@ export const userRepositoryInterface = (repository) => ({
   fetchBookings: (email) => repository.fetchBookings(email),
   fetchReviews: (email) => repository.fetchReviews(email),
   fetchReview: (email, restId) => repository.fetchReview(email, restId),
-  savebooking: (userId, data, total, partnerRevenue, adminRevenue) =>
+  saveBooking: (userId, data, total, partnerRevenue, adminRevenue) =>
     repository.saveBooking(userId, data, total, partnerRevenue, adminRevenue),
   inventoryManagment: (cart) => repository.inventoryManagment(cart),
   bookingCancel: (bookingId, email) =>
