@@ -1,89 +1,71 @@
-import {
-  bookingAvailablity,
-  cancellingBooking,
-  fetchBookings,
-  findReview,
-  findreviews,
-  savingReview,
-  tableReservation,
-} from "../../../domain/usecases/userUseCases/bookingUseCases.js";
+import { userRepository } from "../../../infrastructure/repositories/userRepository.js";
+import { userRepositoryInterface } from "../../../domain/repositories/userRepository.js";
+import { userBookingUseCases } from "../../../domain/usecases/userUseCases/bookingUseCases.js";
 
-export const checkAvailablity = async (req, res) => {
-  try {
-    const result = await bookingAvailablity(req.query);
-    if (result) {
-      return res.status(200).end();
+const userRepositoryInstance = userRepositoryInterface(userRepository);
+const userBookingUseCasesInstance = userBookingUseCases(userRepositoryInstance);
+
+export const userBookingControllers = {
+  checkAvailablity: async (req, res) => {
+    try {
+      const data = req.query;
+      const result = await userBookingUseCasesInstance.bookingAvailablity(data);
+      if (result) {
+        return res.status(200).end();
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json(err.message);
     }
-  } catch (err) {
-    return res.status(400).json(err.message);
-  }
-};
+  },
 
-export const bookingTable = async (req, res) => {
-  try {
-    const userEmail = req.token.email;
-    const result = await tableReservation(req.body, userEmail);
-    if (result) {
-      return res.status(200).end();
+  bookingTable: async (req, res) => {
+    try {
+      const { email } = req.token;
+      const result = await userBookingUseCasesInstance.bookingTable(
+        req.body,
+        email
+      );
+      if (result) {
+        return res.status(200).end();
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
+  },
 
-export const getBookings = async (req, res) => {
-  try {
-    const email = req.token.email;
-    const result = await fetchBookings(email);
-    return res.status(200).json(result);
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json(err.message);
-  }
-};
-
-export const cancelBooking = async (req, res) => {
-  try {
-    const result = await cancellingBooking(req.body.id, req.token.email);
-    if (result) {
-      return res.status(200).end();
+  cancelBooking: async (req, res) => {
+    try {
+      const email = req.token.email;
+      const bookingId = req.body.id;
+      const result = await userBookingUseCasesInstance.cancelBooking(
+        bookingId,
+        email
+      );
+      if (result) {
+        return res.status(200).end();
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
+  },
 
-export const userReview = async (req, res) => {
-  try {
-    const result = await savingReview(
-      req.body.values,
-      req.body.id,
-      req.token.email
-    );
-    if (result) {
-      return res.status(200).end();
+  userReview: async (req, res) => {
+    try {
+      const review = req.body.values;
+      const restId = req.body.id;
+      const email = req.token.email;
+      const result = await userBookingUseCasesInstance.addingReview(
+        review,
+        restId,
+        email
+      );
+      if (result) {
+        return res.status(200).end();
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json(err.message);
     }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const fetchReview = async (req, res) => {
-  try {
-    const result = await findReview(req.query.id, req.token.email);
-    if (result) {
-      return res.status(200).json(result);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const fetchReviews = async (req, res) => {
-  try {
-    const result = await findreviews(req.token.email);
-    if (result) return res.status(200).json(result);
-  } catch (err) {
-    console.log(err);
-  }
+  },
 };

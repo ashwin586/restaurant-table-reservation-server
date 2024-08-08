@@ -42,4 +42,29 @@ export const userProfileUseCases = (userRepository) => ({
       throw new Error(error);
     }
   },
+
+  fetchBookings: async (email) => {
+    try {
+      const bookings = await userRepository.fetchBookings(email);
+      if (bookings) return bookings;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  fetchReviews: async (email) => {
+    try {
+      const response = await userRepository.fetchReviews(email);
+      console.log(response);
+      return response;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+  fetchReview: async (email, restId) => {
+    try {
+      return await userRepository.fetchReview(email, restId);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 });

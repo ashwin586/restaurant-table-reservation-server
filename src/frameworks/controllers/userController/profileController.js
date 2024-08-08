@@ -31,10 +31,45 @@ export const userProfileControllers = {
   editUserImage: async (req, res) => {
     try {
       const { imageURL, userId } = req.body;
-        await userProfileUseCasesInstance.updateProfileImage(imageURL, userId);
+      await userProfileUseCasesInstance.updateProfileImage(imageURL, userId);
       return res.status(200).end();
     } catch (err) {
       return res.status(400).json(err.message);
+    }
+  },
+
+  fetchBookings: async (req, res) => {
+    try {
+      const email = req.token.email;
+      const result = await userProfileUseCasesInstance.fetchBookings(email);
+      return res.status(200).json(result);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(err.message);
+    }
+  },
+  fetchReviews: async (req, res) => {
+    try {
+      const email = req.token.email;
+      const result = await userProfileUseCasesInstance.fetchReviews(email);
+      if (result) return res.status(200).json(result);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).json({ message: err.message });
+    }
+  },
+  fetchReview: async (req, res) => {
+    try {
+      const restId = req.query.id;
+      const email = req.token.email;
+      const response = await userProfileUseCasesInstance.fetchReview(
+        email,
+        restId
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: err.message });
     }
   },
 };

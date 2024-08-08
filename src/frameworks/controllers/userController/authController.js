@@ -22,7 +22,7 @@ const userAuthUseCaseInstance = userAuthUseCases(
   userRepositoryInstance,
   tokenServices
 );
-
+ 
 export const userAuthControllers = {
   register: async (req, res) => {
     try {
@@ -79,6 +79,7 @@ export const userAuthControllers = {
   googleLogin: async (req, res) => {
     try {
       const result = await userAuthUseCaseInstance.googleLogin(req.body.email);
+      console.log(result)
       if (result.userToken) {
         return res.status(200).json({ userToken: result.userToken });
       }

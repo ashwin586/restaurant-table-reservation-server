@@ -41,28 +41,28 @@ export const decodeToken = async (req, res, next) => {
 };
 
 // HANDLING PARTNER TOKEN
-export const generatePartnerToken = async (number) =>{
-  try{
+export const generatePartnerToken = async (number) => {
+  try {
     const payload = {
-      number: number
-    }
+      number: number,
+    };
     return Jwt.sign(payload, process.env.JWTSECRETKEY);
-  }catch(err){
+  } catch (err) {
     console.log(err);
   }
-}
+};
 
 export const decodePartnerToken = async (req, res, next) => {
-  try{
+  try {
     const token = req.headers.authorization?.trim().split(" ")[1];
     Jwt.verify(token, process.env.JWTSECRETKEY, (err, decodedToken) => {
-      if(err){
-        return res.status(401).json({message: 'Unauthorized Access'})
+      if (err) {
+        return res.status(401).json({ message: "Unauthorized Access" });
       }
       req.token = decodedToken;
       next();
-    })
-  }catch(err){
+    });
+  } catch (err) {
     console.log(err);
   }
-}
+};
