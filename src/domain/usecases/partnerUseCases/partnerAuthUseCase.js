@@ -1,45 +1,45 @@
-// import {
-//   findPartner,
-//   savePartner,
-// } from "../../repositories/partnerRepository.js";
-// import { matchPassword, securePassword } from "../../services/bcrypt.js";
-// import { generatePartnerToken } from "../../middlewares/jwtAuth.js";
+import { createPartner } from "../../entities/partners.js";
 
-// export const verifyRegister = async (data) => {
-//   try {
-//     const existingPartner = await findPartner(data.phoneNumber);
-//     if (existingPartner)
-//       throw new Error("This Phone Number is already registered");
-//     const hashedPassword = await securePassword(data.password1);
-//     return await savePartner(data, hashedPassword);
-//   } catch (err) {
-//     throw new Error(err.message);
-//   }
-// };
+export const partnerAuthUseCases = (partnerRepository, bcrypt, jwt) => ({
+  registerPartner: async (data) => {
+    try {
+      const existingPartner = await partnerRepository.findPartner(
+        data.phoneNumber
+      );
+      if (existingPartner)
+        throw new Error("Partner already registered with this Phone Number");
+      const partner = createPartner(data);
+      partner.password = await bcrypt.securePassword(data.password);
+      return await partnerRepository.savePartner(partner);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const verifyLogin = async (data) => {
-//   try {
-//     const existingPartner = await findPartner(data.phoneNumber);
-//     if (!existingPartner) throw new Error("invalid Phone number or password");
-//     const passwordCheck = await matchPassword(
-//       data.password,
-//       existingPartner.password
-//     );
-//     if (passwordCheck) {
-//       const partnerToken = await generatePartnerToken(data.phoneNumber);
-//       return partnerToken;
-//     } else {
-//       throw new Error("Invalid Phone number or password");
-//     }
-//   } catch (err) {
-//     throw new Error(err.message);
-//   }
-// };
+  loginPartner: async (data) => {
+    try {
+      const existingPartner = await partnerRepository.findPartner(
+        data.phoneNumber
+      );
 
-// export const recoverpassword = async (number) => {
-//   try {
-//     return await generatePartnerToken(number);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+      const passwordCheck = await bcrypt.matchPassword(
+        data.password,
+        existingPartner.password
+      );
+
+      if (passwordCheck || existingPartner)
+        return await jwt.generatePartnerToken(data.phoneNumber);
+      else throw new Error("Incorrect Phone number or password");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  recoverPassword: async (data) => {
+    try {
+      return await jwt.generatePartnerToken(data);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});

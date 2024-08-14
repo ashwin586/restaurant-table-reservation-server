@@ -1,10 +1,29 @@
-import Partners from "../entities/Partners.js";
-import Restaurants from "../entities/Restaurants.js";
-import Cuisines from "../entities/cuisine.js";
-import Categories from "../entities/menuCategories.js";
-import Menu from "../entities/Menus.js";
-import Bookings from "../entities/Booking.js";
-import Reviews from "../entities/Reviews.js";
+import Partners from "../models/Partners.js";
+import Restaurants from "../models/Restaurants.js";
+import Cuisines from "../models/cuisine.js";
+import Categories from "../models/menuCategories.js";
+import Menu from "../models/Menus.js";
+import Bookings from "../models/Booking.js";
+import Reviews from "../models/Reviews.js";
+
+export const partnerRepository = {
+  savePartner: async (data) => {
+    try {
+      const partnerModel = new Partners(data);
+      return await partnerModel.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findPartner: async (phoneNumber) => {
+    try {
+      return await Partners.findOne({ phoneNumber: phoneNumber });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+};
 
 export const savePartner = async (data, hashedPassword) => {
   try {
@@ -166,7 +185,8 @@ export const findAllOrders = async (id) => {
         path: "cart.menu",
         model: "Menu",
         select: "name quantity price imageURL",
-      }).sort({_id: -1});
+      })
+      .sort({ _id: -1 });
     return orders;
   } catch (err) {
     console.log(err);
@@ -183,7 +203,7 @@ export const partnerSave = async (data, number, password) => {
           email: data.email,
           phoneNumber: data.phoneNumber,
           imageURL: data.imageURL,
-          password: password
+          password: password,
         },
       },
       { new: true }

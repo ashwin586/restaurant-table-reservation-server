@@ -1,9 +1,5 @@
 import { Router } from "express";
-// import {
-//   partnerLogin,
-//   partnerRegister,
-//   recoverPassword,
-// } from "../controllers/partnerController/partnerAuthController.js";
+import { partnerAuthControllers } from "../controllers/partnerController/partnerAuthController.js";
 // import { decodePartnerToken, decodeToken } from "../middlewares/jwtAuth.js";
 // import {
 //   getPartner,
@@ -26,11 +22,11 @@ import { Router } from "express";
 
 const partnerRoutes = Router();
 
-// partnerRoutes.post("/register", partnerRegister);
-// partnerRoutes.post("/login", partnerLogin);
+partnerRoutes.post("/register", partnerAuthControllers.registerPartner);
+partnerRoutes.post("/login", partnerAuthControllers.loginPartner);
+partnerRoutes.post("/recover", partnerAuthControllers.recoverPassword);
 // partnerRoutes.get("/getDetails", decodePartnerToken, getPartner);
 // partnerRoutes.put("/editPartner", decodePartnerToken, partnerEditController);
-// partnerRoutes.post("/recover", recoverPassword);F
 
 // partnerRoutes.post("/addRestaurant", decodePartnerToken, createRestaurant);
 // partnerRoutes.get("/getAllCuisines", decodePartnerToken, fetchingCuisines);
@@ -50,4 +46,5 @@ const partnerRoutes = Router();
 //   fetchAllOrders
 // );
 // partnerRoutes.get("/dashboard", decodePartnerToken, fetchAllDetails);
+
 export default partnerRoutes;

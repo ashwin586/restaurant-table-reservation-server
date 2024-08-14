@@ -10,3 +10,14 @@ export const generateUserToken = async (email) => {
     console.log(err);
   }
 };
+
+export const generatePartnerToken = async (number) => {
+  try {
+    const payload = {
+      number: number,
+    };
+    return Jwt.sign(payload, process.env.JWTSECRETKEY);
+  } catch (err) {
+    console.log(err);
+  }
+};
