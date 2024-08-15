@@ -23,28 +23,47 @@ export const partnerRepository = {
       throw new Error(error);
     }
   },
-};
 
-export const savePartner = async (data, hashedPassword) => {
-  try {
-    const newPartner = new Partners({
-      name: data.name,
-      email: data.email,
-      phoneNumber: data.phoneNumber,
-      password: hashedPassword,
-    });
-    return await newPartner.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
+  fetchAllPartnerRestaurants: async (id) => {
+    try {
+      return await Restaurants.find({ partner: id })
+        .populate("cuisine")
+        .sort({ _id: -1 });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-export const findPartner = async (phoneNumber) => {
-  try {
-    return await Partners.findOne({ phoneNumber: phoneNumber });
-  } catch (err) {
-    console.log(err);
-  }
+  fetchRestsTotalReviews: async (ids) => {
+    try {
+      const totalCount = await Reviews.countDocuments({
+        restaurant: { $in: ids },
+      });
+      return totalCount;
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  fetchRestsTotalBooking: async (ids) => {
+    try {
+      const totalbooking = await Bookings.countDocuments({
+        restaurant: { $in: ids },
+      });
+      return totalbooking;
+    } catch (err) {
+      console.log(err);
+    }
+  },
+
+  fetchRestsChartData: async (ids) => {
+    try {
+      const data = await Bookings.find({ restaurant: { $in: ids } });
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  },
 };
 
 export const saveRestaurant = async (data, id, openTime, closeTime) => {

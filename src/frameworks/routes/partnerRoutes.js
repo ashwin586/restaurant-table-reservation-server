@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { partnerAuthControllers } from "../controllers/partnerController/partnerAuthController.js";
-// import { decodePartnerToken, decodeToken } from "../middlewares/jwtAuth.js";
+import { partnerDashboardControllers } from "../controllers/partnerController/partnerDashboardController.js";
+import { decodePartnerToken, decodeToken } from "../middlewares/jwtAuth.js";
 // import {
 //   getPartner,
 //   partnerEditController,
@@ -45,6 +46,7 @@ partnerRoutes.post("/recover", partnerAuthControllers.recoverPassword);
 //   decodePartnerToken,
 //   fetchAllOrders
 // );
-// partnerRoutes.get("/dashboard", decodePartnerToken, fetchAllDetails);
+
+partnerRoutes.get("/dashboard", decodePartnerToken, partnerDashboardControllers.fetchDashboardDetails);
 
 export default partnerRoutes;

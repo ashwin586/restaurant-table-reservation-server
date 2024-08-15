@@ -1,24 +1,32 @@
-// import {
-//   allRestaurant,
-//   chartData,
-//   findPartner,
-//   partnerTotalReviewCount,
-//   totalBookings,
-// } from "../../repositories/partnerRepository.js";
-
-// export const dashboardDetails = async (number) => {
-//   try {
-//     const partner = await findPartner(number);
-//     const partnerId = partner._id;
-//     const totalRevenue = partner.revenue;
-//     const restaurants = await allRestaurant(partnerId);
-//     const restaurantIds = restaurants.map(restaurant => restaurant._id);
-//     const totalRestaurants = restaurants.length;
-//     const totalReviewCount = await partnerTotalReviewCount(restaurantIds);
-//     const totalBookingCount = await totalBookings(restaurantIds);
-//     const chartDetails = await chartData(restaurantIds);
-//     return {totalRevenue, totalRestaurants, totalReviewCount, totalBookingCount, chartDetails};
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const partnerDashboardUseCases = (partnerRepository) => ({
+  fetchDashboardDetails: async (data) => {
+    try {
+      const partner = await partnerRepository.findPartner(data);
+      const partnerId = partner._id;
+      const totalRevenue = partner.revenue;
+      const restaurants = await partnerRepository.fetchAllPartnerRestaurants(
+        partnerId
+      );
+      const restaurantIds = restaurants.map((restaurant) => restaurant._id);
+      const totalRestaurants = restaurants.length;
+      const totalReviewCount = await partnerRepository.fetchRestsTotalReviews(
+        restaurantIds
+      );
+      const totalBookingCount = await partnerRepository.fetchRestsTotalBooking(
+        restaurantIds
+      );
+      const chartDetails = await partnerRepository.fetchRestsChartData(
+        restaurantIds
+      );
+      return {
+        totalRevenue,
+        totalRestaurants,
+        totalReviewCount,
+        totalBookingCount,
+        chartDetails,
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  },
+});
