@@ -2,25 +2,16 @@ import { Router } from "express";
 import { partnerAuthControllers } from "../controllers/partnerController/partnerAuthController.js";
 import { partnerDashboardControllers } from "../controllers/partnerController/partnerDashboardController.js";
 import { partnerMenuControllers } from "../controllers/partnerController/partnerMenuController.js";
+import { partnerOrderControllers } from "../controllers/partnerController/partnerOrderController.js";
+import { partnerProfileControllers } from "../controllers/partnerController/partnerProfieController.js";
 import { decodePartnerToken, decodeToken } from "../middlewares/jwtAuth.js";
-// import {
-//   getPartner,
-//   partnerEditController,
-// } from "../controllers/partnerController/partnerProfieController.js";
+
 // import {
 //   createRestaurant,
 //   editRestaurant,
 //   fetchRestaurant,
 //   fetchingCuisines,
 // } from "../controllers/partnerController/partnerRestaurantController.js";
-// import {
-//   addFood,
-//   editedMenu,
-//   fetchAllCategories,
-//   findAllMenus,
-// } from "../controllers/partnerController/partnerMenuController.js";
-// import { fetchAllOrders } from "../controllers/partnerController/partnerOrderController.js";
-// import { fetchAllDetails } from "../controllers/partnerController/partnerDashboardController.js";
 
 const partnerRoutes = Router();
 
@@ -28,8 +19,9 @@ const partnerRoutes = Router();
 partnerRoutes.post("/register", partnerAuthControllers.registerPartner);
 partnerRoutes.post("/login", partnerAuthControllers.loginPartner);
 partnerRoutes.post("/recover", partnerAuthControllers.recoverPassword);
-// partnerRoutes.get("/getDetails", decodePartnerToken, getPartner);
-// partnerRoutes.put("/editPartner", decodePartnerToken, partnerEditController);
+
+partnerRoutes.get("/getDetails", decodePartnerToken, partnerProfileControllers.fetchPartner);
+partnerRoutes.put("/editPartner", decodePartnerToken, partnerProfileControllers.editPartner);
 
 // partnerRoutes.post("/addRestaurant", decodePartnerToken, createRestaurant);
 // partnerRoutes.get("/getAllCuisines", decodePartnerToken, fetchingCuisines);
@@ -43,11 +35,8 @@ partnerRoutes.post("/addFood", decodePartnerToken, partnerMenuControllers.addFoo
 partnerRoutes.get("/fetchAllMenus", decodePartnerToken, partnerMenuControllers.fetchAllMenus);
 partnerRoutes.put("/editMenu", decodePartnerToken, partnerMenuControllers.editMenu);
 
-// partnerRoutes.get(
-//   "/getAllOrdersOfRestaurant",
-//   decodePartnerToken,
-//   fetchAllOrders
-// );
+// * Order Routes
+partnerRoutes.get("/getAllOrdersOfRestaurant", decodePartnerToken, partnerOrderControllers.fetchRestOrders);
 
 // * Dashboard Routes
 partnerRoutes.get("/dashboard", decodePartnerToken, partnerDashboardControllers.fetchDashboardDetails);

@@ -9,5 +9,7 @@ export const partnerRepositoryInterface = (repository) => ({
   addMenu: (createdMenu) => repository.addMenu(createdMenu),
   fetchAllRestMenus: (restId) => repository.fetchAllRestMenus(restId),
   editMenu: (data, id) => repository.editMenu(data, id),
-  findMenuById: (id) => repository.findMenuById(id)
+  findMenuById: (id) => repository.findMenuById(id),
+  fetchRestOrders: (restId) => repository.fetchRestOrders(restId),
+  editPartner: (updatedField, id) => repository.editPartner(updatedField, id),
 });

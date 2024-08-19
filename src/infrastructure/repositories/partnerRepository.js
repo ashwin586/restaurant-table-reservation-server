@@ -106,6 +106,31 @@ export const partnerRepository = {
       throw new Error(error);
     }
   },
+
+  fetchRestOrders: async (restId) => {
+    try {
+      const orders = await Bookings.find({ restaurant: restId })
+        .populate("restaurant", "name")
+        .populate("user", "name phoneNumber email")
+        .populate({
+          path: "cart.menu",
+          model: "Menu",
+          select: "name quantity price imageURL",
+        })
+        .sort({ _id: -1 });
+      return orders;
+    } catch (err) {
+      throw new Error(err);
+    }
+  },
+
+  editPartner: async (updatedField, id) => {
+    try {
+      await Partners.findByIdAndUpdate(id, { $set: updatedField });
+    } catch (error) {
+      throw new Error(err);
+    }
+  },
 };
 
 export const saveRestaurant = async (data, id, openTime, closeTime) => {
