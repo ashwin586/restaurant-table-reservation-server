@@ -1,50 +1,56 @@
-// import {
-//   addingFood,
-//   editMenu,
-//   findAllCategories,
-//   findRestaurantMenus,
-// } from "../../../usecases/partnerUseCases/partnerMenuUseCases.js";
+import { partnerRepository } from "../../../infrastructure/repositories/partnerRepository.js";
+import { partnerMenuUseCases } from "../../../domain/usecases/partnerUseCases/partnerMenuUseCases.js";
+import { partnerRepositoryInterface } from "../../../domain/repositories/partnerRepository.js";
 
-// export const fetchAllCategories = async (req, res) => {
-//   try {
-//     const result = await findAllCategories();
-//     if (result) {
-//       return res.status(200).json(result);
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+const partnerRepositoryInstance = partnerRepositoryInterface(partnerRepository);
+const partnerMenuUseCasesInstance = partnerMenuUseCases(
+  partnerRepositoryInstance
+);
 
-// export const addFood = async (req, res) => {
-//   try {
-//     const result = await addingFood(req.body.values, req.body.isId);
-//     if (result) {
-//       return res.status(200).json(result);
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const partnerMenuControllers = {
+  fetchAllCategories: async (req, res) => {
+    try {
+      const response = await partnerMenuUseCasesInstance.fetchAllCategories();
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-// export const findAllMenus = async (req, res) => {
-//   try {
-//     const result = await findRestaurantMenus(req.query.id);
-//     if (result) {
-//       return res.status(200).json(result);
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  addFood: async (req, res) => {
+    try {
+      const data = req.body.values;
+      const id = req.body.isId;
+      const response = await partnerMenuUseCasesInstance.addFood(data, id);
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-// export const editedMenu = async (req, res) => {
-//   try {
-//     const result = await editMenu(req.body);
-//     if (result) {
-//       return res.status(200).end();
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  fetchAllMenus: async (req, res) => {
+    try {
+      const restId = req.query.id;
+      const response = await partnerMenuUseCasesInstance.fetchAllRestMenus(
+        restId
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+
+  editMenu: async (req, res) => {
+    try {
+      const data = req.body;
+      await partnerMenuUseCasesInstance.editMenu(data);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+};

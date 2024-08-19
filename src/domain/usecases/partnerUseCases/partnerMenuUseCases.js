@@ -1,45 +1,50 @@
-// import {
-//   findCategories,
-//   restaurantMenus,
-//   saveEditedMenu,
-//   savingMenu,
-// } from "../../repositories/partnerRepository.js";
+import { createMenu } from "../../entities/menus.js";
 
-// export const findAllCategories = async () => {
-//   try {
-//     return await findCategories();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const partnerMenuUseCases = (partnerRepository) => ({
+  fetchAllCategories: async () => {
+    try {
+      return await partnerRepository.fetchAllCategories();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const addingFood = async (data, id) => {
-//   try {
-//     return await savingMenu(data, id);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  addFood: async (data, id) => {
+    try {
+      const newFood = createMenu({ ...data, restaurant: id });
+      return await partnerRepository.addMenu(newFood);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const findRestaurantMenus = async (id) => {
-//   try {
-//     return await restaurantMenus(id);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  fetchAllRestMenus: async (restId) => {
+    try {
+      return await partnerRepository.fetchAllRestMenus(restId);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const editMenu = async (data) => {
-//   try {
-//     const id = data.id;
-//     const result = await saveEditedMenu(data, id);
-//     if (result) {
-//       return true;
-//     } else {
-//       throw new Error("Something went Wrong");
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     throw new Error(err.message);
-//   }
-// };
+  editMenu: async (data) => {
+    try {
+      const { id, ...newMenuData } = data;
+      const existingMenu = await partnerRepository.findMenuById(id);
+      if (!existingMenu) throw new Error("Menu Not Found");
+      const updatedField = {};
+
+      for (const key in newMenuData) {
+        if (newMenuData[key] !== existingMenu[key])
+          updatedField[key] = newMenuData[key];
+      }
+
+      if (Object.keys(updatedField).length > 0) {
+        const response = await partnerRepository.editMenu(updatedField, id);
+        if (response) return true;
+        else throw new Error("Something went Wrong");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { partnerAuthControllers } from "../controllers/partnerController/partnerAuthController.js";
 import { partnerDashboardControllers } from "../controllers/partnerController/partnerDashboardController.js";
+import { partnerMenuControllers } from "../controllers/partnerController/partnerMenuController.js";
 import { decodePartnerToken, decodeToken } from "../middlewares/jwtAuth.js";
 // import {
 //   getPartner,
@@ -23,6 +24,7 @@ import { decodePartnerToken, decodeToken } from "../middlewares/jwtAuth.js";
 
 const partnerRoutes = Router();
 
+// * Auth Routes
 partnerRoutes.post("/register", partnerAuthControllers.registerPartner);
 partnerRoutes.post("/login", partnerAuthControllers.loginPartner);
 partnerRoutes.post("/recover", partnerAuthControllers.recoverPassword);
@@ -35,11 +37,11 @@ partnerRoutes.post("/recover", partnerAuthControllers.recoverPassword);
 // partnerRoutes.get("/getPartnerRestaurant", decodePartnerToken, fetchRestaurant);
 // partnerRoutes.put("/editRestaurant", decodePartnerToken, editRestaurant);
 
-// partnerRoutes.get("/fetchCategories", decodePartnerToken, fetchAllCategories);
-
-// partnerRoutes.post("/addFood", decodePartnerToken, addFood);
-// partnerRoutes.get("/fetchAllMenus", decodePartnerToken, findAllMenus);
-// partnerRoutes.put("/editMenu", decodePartnerToken, editedMenu);
+// * Menu Routes
+partnerRoutes.get("/fetchCategories", decodePartnerToken, partnerMenuControllers.fetchAllCategories);
+partnerRoutes.post("/addFood", decodePartnerToken, partnerMenuControllers.addFood);
+partnerRoutes.get("/fetchAllMenus", decodePartnerToken, partnerMenuControllers.fetchAllMenus);
+partnerRoutes.put("/editMenu", decodePartnerToken, partnerMenuControllers.editMenu);
 
 // partnerRoutes.get(
 //   "/getAllOrdersOfRestaurant",
@@ -47,6 +49,7 @@ partnerRoutes.post("/recover", partnerAuthControllers.recoverPassword);
 //   fetchAllOrders
 // );
 
+// * Dashboard Routes
 partnerRoutes.get("/dashboard", decodePartnerToken, partnerDashboardControllers.fetchDashboardDetails);
 
 export default partnerRoutes;

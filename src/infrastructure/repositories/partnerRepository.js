@@ -5,6 +5,7 @@ import Categories from "../models/menuCategories.js";
 import Menu from "../models/Menus.js";
 import Bookings from "../models/Booking.js";
 import Reviews from "../models/Reviews.js";
+import Menus from "../models/Menus.js";
 
 export const partnerRepository = {
   savePartner: async (data) => {
@@ -41,7 +42,7 @@ export const partnerRepository = {
       });
       return totalCount;
     } catch (err) {
-      console.log(err);
+      throw new Error(err);
     }
   },
 
@@ -52,7 +53,7 @@ export const partnerRepository = {
       });
       return totalbooking;
     } catch (err) {
-      console.log(err);
+      throw new Error(err);
     }
   },
 
@@ -61,7 +62,48 @@ export const partnerRepository = {
       const data = await Bookings.find({ restaurant: { $in: ids } });
       return data;
     } catch (err) {
-      console.log(err);
+      throw new Error(err);
+    }
+  },
+
+  fetchAllCategories: async () => {
+    try {
+      return await Categories.find();
+    } catch (err) {
+      throw new Error(err);
+    }
+  },
+
+  addMenu: async (createdMenu) => {
+    try {
+      const newMenu = new Menu(createdMenu);
+      return await newMenu.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  fetchAllRestMenus: async (restId) => {
+    try {
+      return await Menu.find({ restaurant: restId }).populate("foodCategory");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  editMenu: async (updatedData, id) => {
+    try {
+      return await Menu.findByIdAndUpdate(id, { $set: updatedData });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findMenuById: async (id) => {
+    try {
+      return await Menu.findById(id);
+    } catch (error) {
+      throw new Error(error);
     }
   },
 };
@@ -141,39 +183,6 @@ export const saveEditedRestaurant = async (restaurant) => {
   }
 };
 
-export const findCategories = async () => {
-  try {
-    return await Categories.find();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const savingMenu = async (data, id) => {
-  try {
-    const newMenu = new Menu({
-      name: data.name,
-      foodCategory: data.foodType,
-      quantity: data.quantity,
-      price: data.price,
-      category: data.category,
-      imageURL: data.imageURL,
-      restaurant: id,
-    });
-    return await newMenu.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const restaurantMenus = async (id) => {
-  try {
-    return await Menu.find({ restaurant: id }).populate("foodCategory");
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 export const saveEditedMenu = async (newMenu, id) => {
   try {
     return await Menu.findByIdAndUpdate(
@@ -227,37 +236,6 @@ export const partnerSave = async (data, number, password) => {
       },
       { new: true }
     );
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const partnerTotalReviewCount = async (restaurantIds) => {
-  try {
-    const totalCount = await Reviews.countDocuments({
-      restaurant: { $in: restaurantIds },
-    });
-    return totalCount;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const totalBookings = async (restaurantIds) => {
-  try {
-    const totalbooking = await Bookings.countDocuments({
-      restaurant: { $in: restaurantIds },
-    });
-    return totalbooking;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const chartData = async (restaurantIds) => {
-  try {
-    const data = await Bookings.find({ restaurant: { $in: restaurantIds } });
-    return data;
   } catch (err) {
     console.log(err);
   }

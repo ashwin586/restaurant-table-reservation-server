@@ -17,6 +17,7 @@ export const createMenu = ({
     price,
     imageURL,
     restaurant,
+    
     getName() {
       return this.name;
     },
