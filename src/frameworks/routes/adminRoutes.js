@@ -1,15 +1,17 @@
 import { Router } from "express";
-// import {
-//   adminLogin,
-//   adminSignUp,
-// } from "../controllers/adminController/AdminAuthController.js";
+
+import { adminAuthControllers } from "../controllers/adminController/AdminAuthController.js";
+import { adminDashboardController } from "../controllers/adminController/adminDashboardController.js";
+import { adminCategoryController } from "../controllers/adminController/AdminCategoryController.js";
+import { adminCusinesController } from "../controllers/adminController/AdminCusinesController.js";
+
+import { adminCheck } from "../middlewares/jwtAuth.js";
+
 // import {
 //   findUsers,
 //   blockUser,
 //   unBlockUser,
 // } from "../controllers/adminController/adminUserManagment.js";
-
-// import { adminCheck } from "../middlewares/jwtAuth.js";
 
 // import {
 //   blockPartner,
@@ -29,16 +31,11 @@ import { Router } from "express";
 //   deleteCuisine,
 //   findAllCuisines,
 // } from "../controllers/adminController/AdminCusinesController.js";
-// import {
-//   addCategory,
-//   getAllCategory,
-//   removeCategory,
-// } from "../controllers/adminController/AdminCategoryController.js";
-// import { fetchDetails } from "../controllers/adminController/adminDashboardController.js";
+
 
 const adminRoutes = Router();
 
-// adminRoutes.post("/login", adminLogin);
+adminRoutes.post("/login", adminAuthControllers.adminLogin);
 // adminRoutes.post("/signup", adminSignUp);
 // adminRoutes.get("/getUserData", adminCheck, findUsers);
 
@@ -55,13 +52,16 @@ const adminRoutes = Router();
 // adminRoutes.put("/restaurantApprove", adminCheck, approveRestaurant);
 // adminRoutes.put("/restaurantReject", adminCheck);
 
-// adminRoutes.post("/addcusines", adminCheck, addCusines);
-// adminRoutes.get("/getAllCusinies", adminCheck, findAllCuisines);
-// adminRoutes.delete("/deleteCuisine", adminCheck, deleteCuisine);
+// * Cuisines Routes
+adminRoutes.post("/addcusines", adminCheck, adminCusinesController.addCuisine);
+adminRoutes.get("/getAllCusinies", adminCheck, adminCusinesController.fetchAllCuisines);
+adminRoutes.delete("/deleteCuisine", adminCheck, adminCusinesController.removeCuisine);
 
-// adminRoutes.post("/addCategory", adminCheck, addCategory);
-// adminRoutes.get("/getAllCategory", adminCheck, getAllCategory);
-// adminRoutes.delete("/deleteCategory", adminCheck, removeCategory);
+// * Category Routes
+adminRoutes.post("/addCategory", adminCheck, adminCategoryController.addCategory);
+adminRoutes.get("/getAllCategory", adminCheck, adminCategoryController.fetchAllCategories);
+adminRoutes.delete("/deleteCategory", adminCheck, adminCategoryController.removeCategory);
 
-// adminRoutes.get('/dashboard', adminCheck, fetchDetails)
+// * Dashboard details Routes
+adminRoutes.get('/dashboard', adminCheck, adminDashboardController.fetchDashboardDetails)
 export default adminRoutes;

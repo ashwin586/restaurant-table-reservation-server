@@ -1,24 +1,34 @@
-// import { findAllCuisine, findAndDeleteCuisine, findCuisineWithName, registerCuisine } from "../../repositories/adminRepository.js";
+import cuisine from "../../../infrastructure/models/cuisine.js";
+import { createCuisine } from "../../entities/cuisine.js";
 
-// export const addingCuisine = async (cuisine) => {
-//   try {
-//     const exisitingCuisine = await findCuisineWithName(cuisine)
-//     if(exisitingCuisine) throw new Error('Cuisine already exisits');
-//     const result = registerCuisine(cuisine)
-//     return result;
-//   } catch (err) {
-//     console.log(err);
-//     throw new Error(err.message)
-//   }
-// };
+export const adminCuisinesUseCases = (adminRepository) => ({
+  addCuisine: async (data) => {
+    try {
+      const existingCuisine = await adminRepository.findCuisine(data.cuisine);
+      if (existingCuisine) throw new Error("Cuisine Already Exists");
+      const newCuisine = createCuisine({ cuisine: data.cuisine });
+      await adminRepository.saveCuisine(newCuisine);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const findallcuisines = async () => {
-//   try{
-//     return await findAllCuisine();
-//   }catch(err){
-//     console.log(err);
-//   }
-// }
+  fetchAllCuisines: async () => {
+    try {
+      return await adminRepository.fetchAllCuisines();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  removeCuisine: async (id) => {
+    try {
+      await adminRepository.deleteCuisine(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});
 
 // export const deletecuisine = async (id) => {
 //   try{

@@ -1,33 +1,28 @@
-// import {
-//   deletecategory,
-//   findAllCategory,
-//   saveCategory,
-// } from "../../repositories/adminRepository.js";
+import { createCategory } from "../../entities/menucategories.js";
 
-// export const addingCategory = async (category) => {
-//   try {
-//     const savedCategory = await saveCategory(category);
-//     if (saveCategory) {
-//       const category = savedCategory.category;
-//       return category;
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const adminCategoryUseCases = (adminRepository) => ({
+  addCategory: async (data) => {
+    try {
+      const newCategory = createCategory(data);
+      return await adminRepository.saveCategory(newCategory);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const fetchAllCategory = async () => {
-//   try {
-//     return await findAllCategory();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  fetchAllCategories: async () => {
+    try {
+      return await adminRepository.fetchAllCategory();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const deleteCategory = async (id) => {
-//   try {
-//     return await deletecategory(id);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  removeCategory: async (id) => {
+    try {
+      await adminRepository.deleteCategory(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});

@@ -21,3 +21,11 @@ export const generatePartnerToken = async (number) => {
     console.log(err);
   }
 };
+
+export const generateAdminToken = async (email) => {
+  try {
+    return Jwt.sign(email, process.env.JWTSECRETKEY);
+  } catch (err) {
+    console.log(err);
+  }
+};

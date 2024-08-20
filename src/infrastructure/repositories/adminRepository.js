@@ -1,10 +1,102 @@
-import Admin from "../../domain/entities/Admin.js";
-import Booking from "../../domain/entities/Booking.js";
-import Partners from "../../domain/entities/Partners.js";
-import Restaurants from "../../domain/entities/Restaurants.js";
-import Cuisines from "../../domain/entities/cuisine.js";
-import Categories from "../../domain/entities/menuCategories.js";
-import users from "../../domain/entities/user.js";
+import Admin from "../models/Admin.js";
+import Booking from "../models/Booking.js";
+import Partners from "../models/Partners.js";
+import Restaurants from "../models/Restaurants.js";
+import Cuisines from "../models/cuisine.js";
+import Categories from "../models/menuCategories.js";
+import users from "../models/user.js";
+
+export const adminRepository = {
+  findAdmin: async (email) => {
+    try {
+      return await Admin.findOne({ email: email });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  usersCount: async () => {
+    try {
+      return await users.countDocuments({ accountStatus: false });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  restaurantsCount: async () => {
+    try {
+      return await Restaurants.countDocuments({ isBlocked: false });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  partnersCount: async () => {
+    try {
+      return await Partners.countDocuments({ accountStatus: false });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  saveCategory: async (newCategory) => {
+    try {
+      const newCategoryModel = new Categories(newCategory);
+      return await newCategoryModel.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  fetchAllCategory: async () => {
+    try {
+      return await Categories.find();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  deleteCategory: async (id) => {
+    try {
+      await Categories.findByIdAndDelete(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findCuisine: async (cuisine) => {
+    try {
+      return Cuisines.findOne({ cuisine: cuisine });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  saveCuisine: async (newCuisine) => {
+    try {
+      const newCuisineModel = new Cuisines(newCuisine);
+      await newCuisineModel.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  fetchAllCuisines: async () => {
+    try {
+      return Cuisines.find();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  deleteCuisine: async (id) => {
+    try {
+      await Cuisines.findByIdAndDelete(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+};
 
 export const saveNewAdmin = async (data) => {
   try {
@@ -14,14 +106,6 @@ export const saveNewAdmin = async (data) => {
       password: data.password,
     });
     return newAdmin.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findAdmin = async (adminEmail) => {
-  try {
-    return await Admin.findOne({ email: adminEmail }).exec();
   } catch (err) {
     console.log(err);
   }
@@ -107,97 +191,11 @@ export const saveRestaurant = async (restaurant) => {
   }
 };
 
-export const findAllCuisine = async () => {
-  try {
-    return Cuisines.find();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const registerCuisine = async (cuisine) => {
-  try {
-    const Cuisine = new Cuisines({
-      cuisine: cuisine,
-    });
-    return await Cuisine.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findCuisineWithName = async (cuisine) => {
-  try {
-    return Cuisines.findOne({ cuisine: cuisine });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findAndDeleteCuisine = async (id) => {
-  try {
-    return await Cuisines.findByIdAndDelete(id);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const saveCategory = async (data) => {
-  try {
-    const newCategory = new Categories({
-      category: data.category,
-    });
-    return newCategory.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findAllCategory = async () => {
-  try {
-    return await Categories.find();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const deletecategory = async (id) => {
-  try {
-    return await Categories.findByIdAndDelete(id);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const userCount = async () => {
-  try {
-    return await users.countDocuments({ accountStatus: false });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const restaurantOnline = async () => {
-  try {
-    return await Restaurants.countDocuments({ isBlocked: false });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 export const totalrevenue = async () => {
   try {
     const admin = await Admin.findOne();
     const revenue = admin.revenue;
     return revenue;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const partnerCount = async () => {
-  try {
-    return await Partners.countDocuments({ accountStatus: false });
   } catch (err) {
     console.log(err);
   }

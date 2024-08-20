@@ -1,22 +1,16 @@
-// import dotenv from "dotenv";
-// import { generateAdminToken } from "../../middlewares/jwtAuth.js";
-// // import { findPartners } from "./adminPartnerUseCases.js";
-// import { findAdmin, saveNewAdmin } from "../../repositories/adminRepository.js";
-// dotenv.config();
-
-// export const adminLoginVerify = async (email, password) => {
-//   try {
-//     const existingAdminCheck = await findAdmin(email);
-//     if (existingAdminCheck && existingAdminCheck.password === password) {
-//       const adminToken = await generateAdminToken(email);
-//       return { message: "Login Successfull", status: 200, adminToken };
-//     } else {
-//       throw new Error("Invalid email or password");
-//     }
-//   } catch (err) {
-//     throw new Error(err.message);
-//   }
-// };
+export const adminAuthUseCases = (adminRepository, jwt) => ({
+  adminLogin: async (email, password) => {
+    try {
+      const existingAdmin = await adminRepository.findAdmin(email);
+      if (existingAdmin && existingAdmin.password === password) {
+        const adminToken = await jwt.generateAdminToken(email);
+        return { message: "Login Successfull", adminToken };
+      } else throw new Error("Invalid Email or Password");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});
 
 // export const adminCreate = async (data) => {
 //   try {

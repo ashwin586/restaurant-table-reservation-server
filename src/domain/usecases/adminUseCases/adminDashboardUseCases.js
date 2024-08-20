@@ -1,20 +1,15 @@
-// import {
-//     chartDetails,
-//   partnerCount,
-//   restaurantOnline,
-//   totalrevenue,
-//   userCount,
-// } from "../../repositories/adminRepository.js";
-
-// export const dashBoard = async () => {
-//   try {
-//     const users = await userCount();
-//     const restaurants = await restaurantOnline();
-//     const revenue = await totalrevenue();
-//     const partners = await partnerCount();
-//     // const chartData = await chartDetails();
-//     return { users, restaurants, revenue, partners };
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const adminDashboardUseCases = (adminRepository) => ({
+  dashboardDetails: async (email) => {
+    try {
+      const admin = await adminRepository.findAdmin(email);
+      if (!admin) throw new Error("Something went wrong");
+      const users = await adminRepository.usersCount();
+      const restaurants = await adminRepository.restaurantsCount();
+      const revenue = admin.revenue;
+      const partners = await adminRepository.partnersCount();
+      return { users, restaurants, revenue, partners };
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});

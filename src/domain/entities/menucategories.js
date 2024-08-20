@@ -1,19 +1,20 @@
-export const createCuisine = ({ id, cuisine }) => {
+export const createCategory = ({ id, category }) => {
   return {
     id,
-    cuisine,
-    getCuisineName() {
-      return this.cuisine;
+    category,
+    getCategoryName() {
+      return this.category;
     },
 
-    setCuisineName(newCuisineName) {
-      if (typeof newCuisineName === "string" && newCuisineName.trim() !== "") {
-        this.cuisine = newCuisineName;
+    setCategoryName(newCategoryName) {
+      if (
+        typeof newCategoryName === "string" &&
+        newCategoryName.trim() !== ""
+      ) {
+        this.category = newCategoryName;
       } else {
-        throw new Error("Invalid cuisine name");
+        throw new Error("Invalid Categoryname");
       }
     },
-
   };
 };
-
