@@ -12,4 +12,8 @@ export const partnerRepositoryInterface = (repository) => ({
   findMenuById: (id) => repository.findMenuById(id),
   fetchRestOrders: (restId) => repository.fetchRestOrders(restId),
   editPartner: (updatedField, id) => repository.editPartner(updatedField, id),
+  saveRestaurant: (newRest) => repository.saveRestaurant(newRest),
+  fetchAllCuisines: () => repository.fetchAllCuisines(),
+  fetchRestaurant: (id) => repository.fetchRestaurant(id),
+  editRestaurant: (rest, id) => repository.editRestaurant(rest, id),
 });

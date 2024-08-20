@@ -1,50 +1,58 @@
-// import {
-//   allCuisines,
-//   alterRestaurant,
-//   newRestaurant,
-//   partnerRestaurant,
-// } from "../../../usecases/partnerUseCases/partnerRestaurantUseCases.js";
+import { partnerRestaurantUseCases } from "../../../domain/usecases/partnerUseCases/partnerRestaurantUseCases.js";
+import { partnerRepository } from "../../../infrastructure/repositories/partnerRepository.js";
+import { partnerRepositoryInterface } from "../../../domain/repositories/partnerRepository.js";
+import * as moment from "../../../infrastructure/services/moment.js";
 
-// export const createRestaurant = async (req, res) => {
-//   try {
-//     const { number } = req.token;
-//     await newRestaurant(req.body, number);
-//     return res.status(200).end();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+const partnerRepositoryInstance = partnerRepositoryInterface(partnerRepository);
+const partnerRestaurantUseCasesInstance = partnerRestaurantUseCases(
+  partnerRepositoryInstance,
+  moment
+);
 
-// export const fetchingCuisines = async (req, res) => {
-//   try {
-//     const result = await allCuisines();
-//     return res.status(200).json({ result });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const partnerRestaurantControllers = {
+  createRestaurant: async (req, res) => {
+    try {
+      const { number } = req.token;
+      const data = req.body;
+      await partnerRestaurantUseCasesInstance.createRestaurant(data, number);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
+  },
 
-// export const fetchRestaurant = async (req, res) => {
-//   try {
-//     const result = await partnerRestaurant(req.token.number);
-//     if (result.length) {
-//       return res.status(200).json(result);
-//     } else {
-//       throw new Error("Cant find restaurants for this partner");
-//     }
-//   } catch (err) {
-//     return res.status(400).json({ error: err.message }); 
-//   }
-// };
+  fetchCuisines: async (req, res) => {
+    try {
+      const response = await partnerRestaurantUseCasesInstance.fetchCuisines();
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
+  },
 
-// export const editRestaurant = async (req, res) => {
-//   try {
-//     const result = await alterRestaurant(req.body.values);
-//     if (result) {
-//       return res.status(200).end();
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(400).json(err.message);
-//   }
-// };
+  fetchRestaurants: async (req, res) => {
+    try {
+      const { number } = req.token;
+      const response = await partnerRestaurantUseCasesInstance.fetchRestaurants(
+        number
+      );
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
+  },
+
+  editRestaurant: async (req, res) => {
+    try {
+      const data = req.body.values;
+      await partnerRestaurantUseCasesInstance.editRestaurant(data);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error);
+    }
+  },
+};

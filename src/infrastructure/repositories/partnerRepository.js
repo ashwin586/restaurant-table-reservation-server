@@ -5,7 +5,6 @@ import Categories from "../models/menuCategories.js";
 import Menu from "../models/Menus.js";
 import Bookings from "../models/Booking.js";
 import Reviews from "../models/Reviews.js";
-import Menus from "../models/Menus.js";
 
 export const partnerRepository = {
   savePartner: async (data) => {
@@ -131,137 +130,37 @@ export const partnerRepository = {
       throw new Error(err);
     }
   },
-};
 
-export const saveRestaurant = async (data, id, openTime, closeTime) => {
-  try {
-    const newRestaurant = new Restaurants({
-      name: data.name,
-      cuisine: data.selectedCuisines,
-      openTime: openTime,
-      closeTime: closeTime,
-      seats: data.seats,
-      address: data.address,
-      city: data.city,
-      pinCode: data.pinCode,
-      partner: id,
-      latitude: data.latitude,
-      longitude: data.longitude,
-    });
-    return await newRestaurant.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
+  saveRestaurant: async (newRest) => {
+    try {
+      const restModel = new Restaurants(newRest);
+      await restModel.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-export const findAllCuisines = async () => {
-  try {
-    return await Cuisines.find();
-  } catch (err) {
-    console.log(err);
-  }
-};
+  fetchAllCuisines: async () => {
+    try {
+      return await Cuisines.find();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-export const allRestaurant = async (id) => {
-  try {
-    return await Restaurants.find({ partner: id })
-      .populate("cuisine")
-      .sort({ _id: -1 });
-  } catch (err) {
-    console.log(err);
-  }
-};
+  fetchRestaurant: async (id) => {
+    try {
+      return await Restaurants.findById(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-export const findRestaurant = async (id) => {
-  try {
-    return await Restaurants.findById(id);
-  } catch (err) {
-    console.log(err);
-  }
-};
-export const saveEditedRestaurant = async (restaurant) => {
-  try {
-    const imageUrlArray = restaurant.imageURl || [];
-    return Restaurants.findByIdAndUpdate(
-      restaurant._id,
-      {
-        $set: {
-          name: restaurant.name,
-          cuisine: restaurant.cuisine,
-          openTime: restaurant.opens,
-          closeTime: restaurant.closes,
-          seats: restaurant.seats,
-          address: restaurant.address,
-          city: restaurant.city,
-          pinCode: restaurant.pinCode,
-          latitude: restaurant.latitude,
-          longitude: restaurant.longitude,
-        },
-        $addToSet: {
-          images: { $each: imageUrlArray },
-        },
-      },
-      { new: true }
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const saveEditedMenu = async (newMenu, id) => {
-  try {
-    return await Menu.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          name: newMenu.name,
-          foodCategory: newMenu.foodCategory,
-          category: newMenu.category,
-          quantity: newMenu.quantity,
-          price: newMenu.price,
-          imageURL: newMenu.imageURL,
-        },
-      },
-      { new: true }
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findAllOrders = async (id) => {
-  try {
-    const orders = await Bookings.find({ restaurant: id })
-      .populate("restaurant", "name")
-      .populate("user", "name phoneNumber email")
-      .populate({
-        path: "cart.menu",
-        model: "Menu",
-        select: "name quantity price imageURL",
-      })
-      .sort({ _id: -1 });
-    return orders;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const partnerSave = async (data, number, password) => {
-  try {
-    return await Partners.findOneAndUpdate(
-      { phoneNumber: number },
-      {
-        $set: {
-          name: data.name,
-          email: data.email,
-          phoneNumber: data.phoneNumber,
-          imageURL: data.imageURL,
-          password: password,
-        },
-      },
-      { new: true }
-    );
-  } catch (err) {
-    console.log(err);
-  }
+  editRestaurant: async (rest, id) => {
+    try {
+      await Restaurants.findByIdAndUpdate(id, { $set: rest });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
