@@ -4,53 +4,35 @@ import { adminAuthControllers } from "../controllers/adminController/AdminAuthCo
 import { adminDashboardController } from "../controllers/adminController/adminDashboardController.js";
 import { adminCategoryController } from "../controllers/adminController/AdminCategoryController.js";
 import { adminCusinesController } from "../controllers/adminController/AdminCusinesController.js";
+import { adminPartnerManagmentControllers } from "../controllers/adminController/adminPartnerManagment.js";
+import { adminUserManagmentControllers } from "../controllers/adminController/adminUserManagment.js";
+import { adminRestaurantManagmentControllers } from "../controllers/adminController/AdminRestaurantManagment.js";
 
 import { adminCheck } from "../middlewares/jwtAuth.js";
-
-// import {
-//   findUsers,
-//   blockUser,
-//   unBlockUser,
-// } from "../controllers/adminController/adminUserManagment.js";
-
-// import {
-//   blockPartner,
-//   getPartners,
-//   unbockPartner,
-// } from "../controllers/adminController/adminPartnerManagment.js";
-
-// import {
-//   approveRestaurant,
-//   getAllRestaurant,
-//   listRestaurant,
-//   unlistRestaurant,
-// } from "../controllers/adminController/AdminRestaurantManagment.js";
-
-// import {
-//   addCusines,
-//   deleteCuisine,
-//   findAllCuisines,
-// } from "../controllers/adminController/AdminCusinesController.js";
 
 
 const adminRoutes = Router();
 
+// * Auth Routes
 adminRoutes.post("/login", adminAuthControllers.adminLogin);
 // adminRoutes.post("/signup", adminSignUp);
-// adminRoutes.get("/getUserData", adminCheck, findUsers);
 
-// adminRoutes.put("/blockUser", adminCheck, blockUser);
-// adminRoutes.put("/unBlockUser", adminCheck, unBlockUser);
+// * User Management Routes
+adminRoutes.get("/getUserData", adminCheck, adminUserManagmentControllers.fetchAllUsers);
+adminRoutes.put("/blockUser", adminCheck, adminUserManagmentControllers.blockUser);
+adminRoutes.put("/unBlockUser", adminCheck, adminUserManagmentControllers.unBlockUser);
 
-// adminRoutes.get("/getPartnersData", adminCheck, getPartners);
-// adminRoutes.put("/blockPartner", adminCheck, blockPartner);
-// adminRoutes.put("/unBlockPartner", adminCheck, unbockPartner);
+// * Partner Management Routes
+adminRoutes.get("/getPartnersData", adminCheck, adminPartnerManagmentControllers.fetchPartners);
+adminRoutes.put("/blockPartner", adminCheck, adminPartnerManagmentControllers.blockPartner);
+adminRoutes.put("/unBlockPartner", adminCheck, adminPartnerManagmentControllers.unBlockPartner);
 
-// adminRoutes.get("/getAllRestaurants", adminCheck, getAllRestaurant);
-// adminRoutes.put("/unlistRestaurant", adminCheck, unlistRestaurant);
-// adminRoutes.put("/listRestaurant", adminCheck, listRestaurant);
-// adminRoutes.put("/restaurantApprove", adminCheck, approveRestaurant);
-// adminRoutes.put("/restaurantReject", adminCheck);
+// * Restaurant Management Routes
+adminRoutes.get("/getAllRestaurants", adminCheck, adminRestaurantManagmentControllers.fetchAllRestaurants);
+adminRoutes.put("/unlistRestaurant", adminCheck, adminRestaurantManagmentControllers.unlistRestaurant);
+adminRoutes.put("/listRestaurant", adminCheck, adminRestaurantManagmentControllers.listRestaurant);
+adminRoutes.put("/restaurantApprove", adminCheck, adminRestaurantManagmentControllers.approveRestaurant);
+adminRoutes.put("/restaurantReject", adminCheck, adminRestaurantManagmentControllers.rejectRestaurant);
 
 // * Cuisines Routes
 adminRoutes.post("/addcusines", adminCheck, adminCusinesController.addCuisine);
@@ -63,5 +45,6 @@ adminRoutes.get("/getAllCategory", adminCheck, adminCategoryController.fetchAllC
 adminRoutes.delete("/deleteCategory", adminCheck, adminCategoryController.removeCategory);
 
 // * Dashboard details Routes
-adminRoutes.get('/dashboard', adminCheck, adminDashboardController.fetchDashboardDetails)
+adminRoutes.get('/dashboard', adminCheck, adminDashboardController.fetchDashboardDetails);
+
 export default adminRoutes;

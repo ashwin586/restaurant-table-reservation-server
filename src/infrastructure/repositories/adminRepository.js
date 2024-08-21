@@ -96,120 +96,102 @@ export const adminRepository = {
       throw new Error(error);
     }
   },
+
+  fetchAllPartners: async () => {
+    try {
+      return await Partners.find().lean().sort({ _id: -1 });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  togglePartner: async (partner) => {
+    try {
+      return await partner.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findPartner: async (id) => {
+    try {
+      return await Partners.findById(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  fetchAllUsers: async () => {
+    try {
+      return await users.find().sort({ registerDate: -1 });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  toggleUser: async (user) => {
+    try {
+      return await user.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findUser: async (id) => {
+    try {
+      return await users.findById(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  fetchAllRestaurants: async () => {
+    try {
+      return await Restaurants.find().populate("partner").populate("cuisine");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findRestaurant: async (id) => {
+    try {
+      return await Restaurants.findById(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  toggleRestaurant: async (restaurant) => {
+    try {
+      return restaurant.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 };
 
-export const saveNewAdmin = async (data) => {
-  try {
-    const newAdmin = new Admin({
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    });
-    return newAdmin.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
+// export const saveNewAdmin = async (data) => {
+//   try {
+//     const newAdmin = new Admin({
+//       name: data.name,
+//       email: data.email,
+//       password: data.password,
+//     });
+//     return newAdmin.save();
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
-export const findAllPartners = async () => {
-  try {
-    return await Partners.find().lean().sort({ _id: -1 });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findPartnerWithId = async (id) => {
-  try {
-    return await Partners.findById(id);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const savePartner = async (partner) => {
-  try {
-    return await partner.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findAllRestaurants = async () => {
-  try {
-    return await Restaurants.find().populate("partner").populate("cuisine");
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findRestaurantWithId = async (id) => {
-  try {
-    return await Restaurants.findById(id);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const findAllUsers = async () => {
-  try {
-    return await users.find().sort({ registerDate: -1 });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const blockTheUser = async (id) => {
-  try {
-    return await users.findByIdAndUpdate(
-      id,
-      { accountStatus: true },
-      { new: true }
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const unBlockTheUser = async (id) => {
-  try {
-    return await users.findByIdAndUpdate(
-      id,
-      { accountStatus: false },
-      { new: true }
-    );
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const saveRestaurant = async (restaurant) => {
-  try {
-    return restaurant.save();
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const totalrevenue = async () => {
-  try {
-    const admin = await Admin.findOne();
-    const revenue = admin.revenue;
-    return revenue;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const chartDetails = async () => {
-  try {
-    const restaurants = await Restaurants.find();
-    const restaurantIds = restaurants.map((restaurant) => restaurant._id);
-    const bookings = await Booking.find({
-      restaurant: { $in: restaurantIds },
-    });
-    return bookings;
-  } catch (err) {
-    console.log(err);
-  }
-};
+// export const chartDetails = async () => {
+//   try {
+//     const restaurants = await Restaurants.find();
+//     const restaurantIds = restaurants.map((restaurant) => restaurant._id);
+//     const bookings = await Booking.find({
+//       restaurant: { $in: restaurantIds },
+//     });
+//     return bookings;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };

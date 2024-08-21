@@ -1,69 +1,57 @@
-// import {
-//   findAllRestaurants,
-//   findRestaurantWithId,
-//   saveRestaurant,
-// } from "../../repositories/adminRepository.js";
+export const adminRestaurantUseCases = (adminRepository) => ({
+  fetchAllRestaurant: async () => {
+    try {
+      return await adminRepository.fetchAllRestaurants();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const fetchRestaurants = async () => {
-//   try {
-//     return await findAllRestaurants();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  unlistRestaurant: async (id) => {
+    try {
+      const existingRestaurant = await adminRepository.findRestaurant(id);
+      if (existingRestaurant) {
+        existingRestaurant.isBlocked = true;
+        await adminRepository.toggleRestaurant(existingRestaurant);
+      } else throw new Error("Operation Failed");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const unlist = async (id) => {
-//   try {
-//     const restaurant = await findRestaurantWithId(id);
-//     if (restaurant) {
-//       restaurant.isBlocked = true;
-//       return await saveRestaurant(restaurant);
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  listRestaurant: async (id) => {
+    try {
+      const existingRestaurant = await adminRepository.findRestaurant(id);
+      if (existingRestaurant) {
+        existingRestaurant.isBlocked = false;
+        await adminRepository.toggleRestaurant(existingRestaurant);
+      } else throw new Error("Operation Failed");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const list = async (id) => {
-//   try {
-//     const restaurant = await findRestaurantWithId(id);
-//     if (restaurant) {
-//       restaurant.isBlocked = false;
-//       return await saveRestaurant(restaurant);
-//     }
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  approveRestaurant: async (id) => {
+    try {
+      const existingRestaurant = await adminRepository.findRestaurant(id);
+      if (existingRestaurant) {
+        existingRestaurant.isApproved = "Approved";
+        await adminRepository.toggleRestaurant(existingRestaurant);
+      } else throw new Error("Something went Wrong");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const approve = async (id) => {
-//   try {
-//     const restaurant = await findRestaurantWithId(id);
-//     if (restaurant) {
-//       restaurant.isApproved = "Approved";
-//       await saveRestaurant(restaurant);
-//       return true;
-//     } else {
-//       throw new Error("Something went wrong");
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     throw new Error(err.message);
-//   }
-// };
-
-// export const reject = async(id) => {
-//   try{
-//     const restaurant = await findRestaurantWithId(id);
-//     if(restaurant){
-//       restaurant.isApproved = 'Rejected'
-//       await saveRestaurant(restaurant);
-//       return true
-//     } else {
-//       throw new Error('Something went wrong');
-//     }
-//   }catch(err){
-//     console.log(err)
-//     throw new Error(err.message);
-//   }
-// }
+  rejectRestaurant: async (id) => {
+    try {
+      const existingRestaurant = await adminRepository.findRestaurant(id);
+      if (existingRestaurant) {
+        existingRestaurant.isApproved = "Rejected";
+        await adminRepository.toggleRestaurant(existingRestaurant);
+      } else throw new Error("Something went Wrong");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});

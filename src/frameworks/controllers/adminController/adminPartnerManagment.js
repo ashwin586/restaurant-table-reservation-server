@@ -1,36 +1,42 @@
-// import {
-//   blockpartner,
-//   findPartners,
-//   unBlockpartner,
-// } from "../../../usecases/adminUseCases/adminPartnerUseCases.js";
+import { adminPartnerUseCases } from "../../../domain/usecases/adminUseCases/adminPartnerUseCases.js";
+import { adminRepository } from "../../../infrastructure/repositories/adminRepository.js";
+import { adminRepositoryInterface } from "../../../domain/repositories/adminRepository.js";
 
-// export const getPartners = async (req, res) => {
-//   try {
-//     const response = await findPartners();
-//     return res.json(response);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+const adminRepositoryInstance = adminRepositoryInterface(adminRepository);
+const adminPartnerUseCasesInstance = adminPartnerUseCases(
+  adminRepositoryInstance
+);
 
-// export const blockPartner = async (req, res) => {
-//   try {
-//     const { id } = req.body;
-//     await blockpartner(id);
-//     return res.status(200).end();
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(400).json({ message: err.message });
-//   }
-// };
+export const adminPartnerManagmentControllers = {
+  fetchPartners: async (req, res) => {
+    try {
+      const response = await adminPartnerUseCasesInstance.fetchPartners();
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-// export const unbockPartner = async (req, res) => {
-//   try {
-//     const { id } = req.body;
-//     await unBlockpartner(id);
-//     return res.status(200).end();
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(400).json({ message: err.message });
-//   }
-// };
+  blockPartner: async (req, res) => {
+    try {
+      const { id } = req.body;
+      await adminPartnerUseCasesInstance.blockPartner(id);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+
+  unBlockPartner: async (req, res) => {
+    try {
+      const { id } = req.body;
+      await adminPartnerUseCasesInstance.unBlockPartner(id);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+};

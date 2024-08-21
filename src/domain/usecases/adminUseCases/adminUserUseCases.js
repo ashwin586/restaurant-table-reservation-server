@@ -1,28 +1,33 @@
-// import { blockTheUser, findAllUsers, unBlockTheUser } from "../../repositories/adminRepository.js";
+export const adminUserUseCases = (adminRepository) => ({
+  fetchAllUsers: async () => {
+    try {
+      return await adminRepository.fetchAllUsers();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const fetchallusers = async () => {
-//   try {
-//     const response = await findAllUsers()
-//     if(response) return response;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  blockUser: async (id) => {
+    try {
+      const existingUser = await adminRepository.findUser(id);
+      if (existingUser) {
+        existingUser.accountStatus = true;
+        return await adminRepository.toggleUser(existingUser);
+      } else throw new Error("Operation failed");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const blockuser = async (id) => {
-//   try {
-//     const response = await blockTheUser(id);
-//     if(response) return response;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-
-// export const unblockuser = async (id) => {
-//   try {
-//     const response = await unBlockTheUser(id)
-//     if(response) return response;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  unBlockUser: async (id) => {
+    try {
+      const existingUser = await adminRepository.findUser(id);
+      if (existingUser) {
+        existingUser.accountStatus = false;
+        return await adminRepository.toggleUser(existingUser);
+      } else throw new Error("Operation failed");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});

@@ -1,60 +1,65 @@
-// import {
-//   approve,
-//   fetchRestaurants,
-//   list,
-//   reject,
-//   unlist,
-// } from "../../../usecases/adminUseCases/adminRestaurantUseCases.js";
+import { adminRestaurantUseCases } from "../../../domain/usecases/adminUseCases/adminRestaurantUseCases.js";
+import { adminRepository } from "../../../infrastructure/repositories/adminRepository.js";
+import { adminRepositoryInterface } from "../../../domain/repositories/adminRepository.js";
 
-// export const getAllRestaurant = async (req, res) => {
-//   try {
-//     const restaurants = await fetchRestaurants();
-//     return res.status(200).json(restaurants);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+const adminRepositoryInstance = adminRepositoryInterface(adminRepository);
+const adminRestaurantUseCasesInstance = adminRestaurantUseCases(
+  adminRepositoryInstance
+);
 
-// export const unlistRestaurant = async (req, res) => {
-//   try {
-//     const { id } = req.body;
-//     await unlist(id);
-//     return res.status(200).end();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+export const adminRestaurantManagmentControllers = {
+  fetchAllRestaurants: async (req, res) => {
+    try {
+      const response =
+        await adminRestaurantUseCasesInstance.fetchAllRestaurant();
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-// export const listRestaurant = async (req, res) => {
-//   try {
-//     const { id } = req.body;
-//     await list(id);
-//     return res.status(200).end();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+  unlistRestaurant: async (req, res) => {
+    try {
+      const { id } = req.body;
+      await adminRestaurantUseCasesInstance.unlistRestaurant(id);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-// export const approveRestaurant = async (req, res) => {
-//   try {
-//     const result = await approve(req.body.id);
-//     if (result) {
-//       return res.status(200).end();
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(400).json(err.message);
-//   }
-// };
+  listRestaurant: async (req, res) => {
+    try {
+      const { id } = req.body;
+      await adminRestaurantUseCasesInstance.listRestaurant(id);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-// export const rejectRestaurant = async (req, res) => {
-//   try {
-//     const result = await reject(req.bosy.id);
-//     if (result) {
-//       return res.status(200).end();
-//     }
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(400).json(err.message);
-//   }
-// };
+  approveRestaurant: async (req, res) => {
+    try {
+      const { id } = req.body.id;
+      await adminRestaurantUseCasesInstance.approveRestaurant(id);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+
+  rejectRestaurant: async (req, res) => {
+    try {
+      const { id } = req.body;
+      await adminRestaurantUseCasesInstance.rejectRestaurant(id);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+};

@@ -1,39 +1,34 @@
-// import { findAllPartners, findPartnerWithId, savePartner } from "../../repositories/adminRepository.js";
+export const adminPartnerUseCases = (adminRepository) => ({
+  fetchPartners: async () => {
+    try {
+      return await adminRepository.fetchAllPartners();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const findPartners = async() =>{
-//     try{
-//         return await findAllPartners();
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
+  blockPartner: async (id) => {
+    try {
+      const existingPartner = await adminRepository.findPartner(id);
+      if (existingPartner) {
+        existingPartner.accountStatus = true;
+        await adminRepository.togglePartner(existingPartner);
+      } else throw new Error("Operation failed");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
 
-// export const blockpartner = async (id) =>{
-//     try{
-//         const partner = await findPartnerWithId(id);
-//         if(partner){
-//             partner.accountStatus = true;
-//             await savePartner(partner)
-//         } else {
-//             throw new Error ('Something went wrong');
-//         }
-//     }catch(err){    
-//         console.log(err);
-//         throw new Error(err.message);
-//     }
-// }
+  unBlockPartner: async (id) => {
+    try {
+      const existingPartner = await adminRepository.findPartner(id);
+      if (existingPartner) {
+        existingPartner.accountStatus = false;
+        await adminRepository.togglePartner(existingPartner);
+      } else throw new Error("Operation failed");
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+});
 
-// export const unBlockpartner = async (id) => {
-//     try{
-//         const partner = await findPartnerWithId(id);
-//         if(partner){
-//             partner.accountStatus = false;
-//             await savePartner(partner)
-//         } else {
-//             throw new Error ('Something went wrong');
-//         }
-//     }catch(err){
-//         console.log(err);
-//         throw new Error(err.message);
-//     }
-// }

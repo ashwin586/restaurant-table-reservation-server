@@ -10,4 +10,13 @@ export const adminRepositoryInterface = (repository) => ({
   saveCuisine: (newCuisine) => repository.saveCuisine(newCuisine),
   fetchAllCuisines: () => repository.fetchAllCuisines(),
   deleteCuisine: (id) => repository.deleteCuisine(id),
+  fetchAllPartners: () => repository.fetchAllPartners(),
+  togglePartner: (partner) => repository.togglePartner(partner),
+  findPartner: (id) => repository.findPartner(id),
+  fetchAllUsers: () => repository.fetchAllUsers(),
+  toggleUser: (user) => repository.toggleUser(user),
+  findUser: (id) => repository.findUser(id),
+  fetchAllRestaurants: () => repository.fetchAllRestaurants(),
+  findRestaurant: (id) => repository.findRestaurant(id),
+  toggleRestaurant: (restaurant) => repository.toggleRestaurant(restaurant),
 });

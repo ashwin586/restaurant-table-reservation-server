@@ -1,32 +1,40 @@
-// import { blockuser, fetchallusers, unblockuser } from "../../../usecases/adminUseCases/adminUserUseCases.js";
+import { adminUserUseCases } from "../../../domain/usecases/adminUseCases/adminUserUseCases.js";
+import { adminRepository } from "../../../infrastructure/repositories/adminRepository.js";
+import { adminRepositoryInterface } from "../../../domain/repositories/adminRepository.js";
 
-// export const findUsers = async(req, res) => {
-//     try{
-//         const response = await fetchallusers();
-//         return res.json(response);
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
+const adminRepositoryInstance = adminRepositoryInterface(adminRepository);
+const adminUserUseCasesInstance = adminUserUseCases(adminRepositoryInstance);
 
-// export const blockUser = async (req, res) => {
-//     try{
-//         const {id} = req.body
-//         const result = await blockuser(id);
-//         return res.status(200).json({name: result.name});
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
+export const adminUserManagmentControllers = {
+  fetchAllUsers: async (req, res) => {
+    try {
+      const response = await adminUserUseCasesInstance.fetchAllUsers();
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-// export const unBlockUser = async (req, res) => {
-//     try{
-//         const {id} = req.body;
-//         const result = await unblockuser(id)
-//         return res.status(200).json({name: result.name});
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
+  blockUser: async (req, res) => {
+    try {
+      const { id } = req.body;
+      const { name } = await adminUserUseCasesInstance.blockUser(id);
+      return res.status(200).json({ name: name });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
 
-
+  unBlockUser: async (req, res) => {
+    try {
+      const { id } = req.body;
+      const { name } = await adminUserUseCasesInstance.unBlockUser(id);
+      return res.status(200).json({ name: name });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+};
