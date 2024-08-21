@@ -5,11 +5,11 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import userRoute from "./frameworks/routes/userRoutes.js";
 import adminRoutes from "./frameworks/routes/adminRoutes.js";
-import { v4 as uuidv4 } from "uuid";
 import partnerRoutes from "./frameworks/routes/partnerRoutes.js";
-dotenv.config();
+import { corsConfig } from "./config/cors.js";
+import { v4 as uuidv4 } from "uuid";
 
-const allowedOrigins = [process.env.HOSTEDORIGIN];
+dotenv.config();
 
 const app = express();
 
@@ -22,19 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 //   next();
 // });
 
-app.use(
-  cors({
-    // origin: function (origin, callback) {
-    //   if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-    //     callback(null, true);
-    //   } else {
-    //     callback(new Error("Not allowed by CORS"));
-    //   }
-    // },
-    origin: "*",
-    credentials: true,
-  })
-);
+app.use(cors(corsConfig));
 
 app.use(
   session({
@@ -50,6 +38,7 @@ app.use(
 app.use("/", userRoute);
 app.use("/admin", adminRoutes);
 app.use("/partner", partnerRoutes);
+
 connectDB();
 
 app.listen(process.env.PORT, () => {
