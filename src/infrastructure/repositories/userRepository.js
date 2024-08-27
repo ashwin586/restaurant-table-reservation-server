@@ -5,6 +5,7 @@ import Booking from "../models/Booking.js";
 import Reviews from "../models/Reviews.js";
 import Partners from "../models/Partners.js";
 import Admin from "../models/Admin.js";
+import Otp from "../models/Otp.js";
 
 export const userRepository = {
   saveUser: async (User) => {
@@ -15,6 +16,16 @@ export const userRepository = {
       throw new Error(err);
     }
   },
+
+  saveOtp: async (otp) => {
+    try {
+      const otpModel = new Otp(otp);
+      await otpModel.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
   findByEmail: async (email) => {
     try {
       return await user.findOne({ email });
@@ -26,6 +37,14 @@ export const userRepository = {
   findById: async (id) => {
     try {
       return await user.findById(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findOtp: async (email) => {
+    try {
+      return await Otp.findOne({ email: email });
     } catch (error) {
       throw new Error(error);
     }

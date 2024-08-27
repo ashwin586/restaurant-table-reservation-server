@@ -19,6 +19,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
   userImage: {
     type: String,
   },
@@ -29,9 +33,9 @@ const userSchema = new Schema({
   wallet: {
     balance: {
       type: Number,
-      default: 0
-    }
-  }
+      default: 0,
+    },
+  },
 });
 
 export default mongoose.model("users", userSchema);

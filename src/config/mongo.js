@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
-import "../infrastructure/models/Admin.js"
-import "../infrastructure/models/Booking.js"
-import "../infrastructure/models/Menus.js"
-import "../infrastructure/models/Partners.js"
-import "../infrastructure/models/Restaurants.js"
-import "../infrastructure/models/Reviews.js"
-import "../infrastructure/models/cuisine.js"
-import "../infrastructure/models/menuCategories.js"
-import "../infrastructure/models/user.js"
+import "../infrastructure/models/Admin.js";
+import "../infrastructure/models/Booking.js";
+import "../infrastructure/models/Menus.js";
+import "../infrastructure/models/Partners.js";
+import "../infrastructure/models/Restaurants.js";
+import "../infrastructure/models/Reviews.js";
+import "../infrastructure/models/cuisine.js";
+import "../infrastructure/models/menuCategories.js";
+import "../infrastructure/models/user.js";
 
 export default async function connectDB() {
   try {

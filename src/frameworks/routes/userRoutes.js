@@ -1,10 +1,4 @@
 import { Router } from "express";
-import {
-  checkUserStatus,
-  emailVerify,
-  otpVerify,
-  sendOtp,
-} from "../controllers/userController/authController.js";
 import { decodeToken } from "../middlewares/jwtAuth.js";
 
 import { userAuthControllers } from "../controllers/userController/authController.js";
@@ -14,11 +8,12 @@ import { userBookingControllers } from "../controllers/userController/bookingCon
 
 const userRoute = Router();
 
-userRoute.post("/registeruser", userAuthControllers.register);
-userRoute.post("/sendOtp", sendOtp);
+// * Auth Routes
+userRoute.post("/registerUser", userAuthControllers.register);
+// userRoute.post("/reSendOtp", sendOtp);
 userRoute.post("/login", userAuthControllers.login);
-userRoute.post("/emailverify", emailVerify);
-userRoute.post("/otpverify", otpVerify);
+// userRoute.post("/emailverify", emailVerify);
+userRoute.post("/otpVerify", userAuthControllers.otpVerify);
 userRoute.post("/google/signup", userAuthControllers.googleRegister);
 userRoute.post("/google/login", userAuthControllers.googleLogin);
 userRoute.post("/forgotpassword", userAuthControllers.forgotPassword);

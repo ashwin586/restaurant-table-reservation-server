@@ -5,7 +5,6 @@ export const userProfileUseCases = (userRepository) => ({
     try {
       return await userRepository.findByEmail(email);
     } catch (error) {
-      console.log(error);
       throw new Error(error);
     }
   },
@@ -26,7 +25,6 @@ export const userProfileUseCases = (userRepository) => ({
         return await userRepository.updateUser(user._id, updatedFields);
       } else throw new Error("User not found");
     } catch (error) {
-      console.log(error);
       throw new Error(error);
     }
   },
@@ -38,7 +36,6 @@ export const userProfileUseCases = (userRepository) => ({
       user.userImage = imageURL;
       return await userRepository.updateUser(userId, user);
     } catch (error) {
-      console.log(error);
       throw new Error(error);
     }
   },
@@ -54,7 +51,6 @@ export const userProfileUseCases = (userRepository) => ({
   fetchReviews: async (email) => {
     try {
       const response = await userRepository.fetchReviews(email);
-      console.log(response);
       return response;
     } catch (error) {
       throw new Error(error);

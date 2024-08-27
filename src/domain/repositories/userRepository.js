@@ -1,7 +1,9 @@
 export const userRepositoryInterface = (repository) => ({
   saveUser: (user) => repository.saveUser(user),
+  saveOtp: (otp) => repository.saveOtp(otp),
   findByEmail: (email) => repository.findByEmail(email),
   findById: (id) => repository.findById(id),
+  findOtp: (email) => repository.findOtp(email),
   updateUser: (userId, updatedUserData) =>
     repository.updateUser(userId, updatedUserData),
   fetchAllRestaurants: () => repository.fetchAllRestaurants(),

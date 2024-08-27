@@ -2,21 +2,18 @@ import {
   matchPassword,
   securePassword,
 } from "../../../infrastructure/services/bcrypt.js";
-// import {
-//   retrieveData,
-//   removeData,
-// } from "../../../infrastructure/services/nodemailer.js";
 
 import { createUser } from "../../entities/user.js";
+import { createOtp } from "../../entities/otp.js";
 
-export const userAuthUseCases = (userRepository, tokenServices) => ({
+export const userAuthUseCases = (
+  userRepository,
+  tokenServices,
+  nodeMailer
+) => ({
   registerUser: async (userDetails) => {
     try {
       const user = createUser(userDetails);
-
-      if (!user.isValidEmail()) {
-        throw new Error("Invalid email");
-      }
 
       const existingUser = await userRepository.findByEmail(user.email);
       if (existingUser) {
@@ -24,7 +21,16 @@ export const userAuthUseCases = (userRepository, tokenServices) => ({
       }
 
       user.password = await securePassword(userDetails.password);
-      return await userRepository.saveUser(user);
+
+      const otpGenerated = nodeMailer.generateOtp();
+      const email = userDetails.email;
+      const subject = "Email Verification otp";
+      const text = `Your email verificatoin OTP is ${otpGenerated}`;
+      const otp = createOtp({ email: email, otp: otpGenerated });
+
+      await nodeMailer.sendMail(email, subject, text);
+      await userRepository.saveUser(user);
+      await userRepository.saveOtp(otp);
     } catch (err) {
       throw new Error(err.message);
     }
@@ -37,6 +43,9 @@ export const userAuthUseCases = (userRepository, tokenServices) => ({
       if (!response) {
         throw new Error("Email not registered");
       }
+
+      if (!response.isVerified)
+        return { error: "Email is not verified", statusCode: 401 };
 
       if (response.accountStatus)
         throw new Error(
@@ -104,6 +113,21 @@ export const userAuthUseCases = (userRepository, tokenServices) => ({
       }
     } catch (error) {
       console.log(error);
+      throw new Error(error);
+    }
+  },
+
+  otpVerify: async (otp, email) => {
+    try {
+      const exisitinOtp = await userRepository.findOtp(email);
+      if (!exisitinOtp) throw new Error("Otp Expired.");
+      if (exisitinOtp.otp === otp) {
+        const existingUser = await userRepository.findByEmail(email);
+        existingUser.isVerified = true;
+        const userId = existingUser._id;
+        await userRepository.updateUser(userId, existingUser);
+      } else throw new Error("Entered otp is wrong.");
+    } catch (error) {
       throw new Error(error);
     }
   },
