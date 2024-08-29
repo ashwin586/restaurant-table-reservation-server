@@ -32,6 +32,7 @@ export const partnerAuthUseCases = (partnerRepository, bcrypt, jwt) => ({
 
       if (passwordCheck)
         return await jwt.generatePartnerToken(data.phoneNumber);
+      else throw new Error("Incorrect Phonenumber or Password");
     } catch (error) {
       throw new Error(error);
     }

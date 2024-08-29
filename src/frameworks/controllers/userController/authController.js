@@ -36,6 +36,7 @@ export const userAuthControllers = {
           .json({ message: response.error });
       return res.status(200).json({ userToken: response.userToken });
     } catch (err) {
+      console.log(err);
       return res.status(400).json({ message: err.message });
     }
   },
@@ -51,18 +52,18 @@ export const userAuthControllers = {
         return res.status(200).end();
       }
     } catch (err) {
+      console.log(err);
       return res.status(400).json(err.message);
     }
   },
 
   googleLogin: async (req, res) => {
     try {
-      const result = await userAuthUseCaseInstance.googleLogin(req.body.email);
-      console.log(result);
-      if (result.userToken) {
-        return res.status(200).json({ userToken: result.userToken });
-      }
+      const email = req.body.email;
+      const response = await userAuthUseCaseInstance.googleLogin(email);
+      return res.status(200).json({ userToken: response });
     } catch (err) {
+      console.log(err);
       return res.status(400).json(err.message);
     }
   },
@@ -80,7 +81,19 @@ export const userAuthControllers = {
           .json({ message: "Password updated successfully" });
       }
     } catch (err) {
+      console.log(err);
       return res.status(400).json({ message: err.message });
+    }
+  },
+
+  resendOtp: async (req, res) => {
+    try {
+      const { email } = req.body;
+      await userAuthUseCaseInstance.resendOtp(email);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
 
@@ -109,18 +122,6 @@ export const emailVerify = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    return res.status(400).json({ message: err.message });
-  }
-};
-
-export const otpVerify = async (req, res) => {
-  try {
-    const { otp, email } = req.body;
-    const result = await userOtp(otp, email);
-    if (result) {
-      return res.status(200).end();
-    }
-  } catch (err) {
     return res.status(400).json({ message: err.message });
   }
 };

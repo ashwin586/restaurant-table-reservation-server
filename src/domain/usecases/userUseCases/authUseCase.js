@@ -117,6 +117,20 @@ export const userAuthUseCases = (
     }
   },
 
+  resendOtp: async (email) => {
+    try {
+      const otpGenerated = nodeMailer.generateOtp();
+      const subject = "Email Verification otp";
+      const text = `Your email verificatoin OTP is ${otpGenerated}`;
+      const otp = createOtp({ email: email, otp: otpGenerated });
+      await nodeMailer.sendMail(email, subject, text);
+      await userRepository.saveOtp(otp);
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  },
+
   otpVerify: async (otp, email) => {
     try {
       const exisitinOtp = await userRepository.findOtp(email);
@@ -153,19 +167,6 @@ export const checkUser = async (email) => {
     const user = await findUser(email);
     if (!user) throw new Error("Email not registered");
     return user;
-  } catch (err) {
-    throw new Error(err.message);
-  }
-};
-
-export const userOtp = async (otp, email) => {
-  try {
-    const storedOtp = retrieveData(email);
-    if (storedOtp === otp) {
-      return true;
-    } else {
-      throw new Error("Entered OTP is not correct");
-    }
   } catch (err) {
     throw new Error(err.message);
   }
