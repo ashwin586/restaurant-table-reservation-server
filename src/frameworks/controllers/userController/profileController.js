@@ -22,9 +22,9 @@ export const userProfileControllers = {
       const userDetails = req.body;
       await userProfileUseCasesInstance.editUser(userDetails);
       return res.status(200).end();
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
 
@@ -33,8 +33,8 @@ export const userProfileControllers = {
       const { imageURL, userId } = req.body;
       await userProfileUseCasesInstance.updateProfileImage(imageURL, userId);
       return res.status(200).end();
-    } catch (err) {
-      return res.status(400).json(err.message);
+    } catch (error) {
+      return res.status(400).json(error.message);
     }
   },
 
@@ -45,19 +45,21 @@ export const userProfileControllers = {
       return res.status(200).json(result);
     } catch (error) {
       console.log(error);
-      return res.status(400).json(err.message);
+      return res.status(400).json(error.message);
     }
   },
+
   fetchReviews: async (req, res) => {
     try {
       const email = req.token.email;
       const result = await userProfileUseCasesInstance.fetchReviews(email);
-      if (result) return res.status(200).json(result);
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
+      return res.status(200).json(result);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
+
   fetchReview: async (req, res) => {
     try {
       const restId = req.query.id;
@@ -69,7 +71,7 @@ export const userProfileControllers = {
       return res.status(200).json(response);
     } catch (error) {
       console.log(error);
-      return res.status(400).json({ message: err.message });
+      return res.status(400).json({ message: error.message });
     }
   },
 };

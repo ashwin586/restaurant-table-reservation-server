@@ -27,8 +27,8 @@ const userSchema = new Schema({
     type: String,
   },
   registerDate: {
-    type: String,
-    default: Date.now(),
+    type: Date,
+    default: Date.now,
   },
   wallet: {
     balance: {

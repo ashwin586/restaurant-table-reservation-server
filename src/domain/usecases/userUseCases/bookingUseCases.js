@@ -17,9 +17,8 @@ export const userBookingUseCases = (userRepository) => ({
       const availableSeats = restaurantDetails.seats - totalSeatsBooked;
       if (selectedSeats > availableSeats)
         throw new Error("No seats available during this time");
-      else return true;
-    } catch (err) {
-      throw new Error(err.message);
+    } catch (error) {
+      throw new Error(error);
     }
   },
 
@@ -41,20 +40,16 @@ export const userBookingUseCases = (userRepository) => ({
         partnerRevenue,
         adminRevenue
       );
-      return true;
-    } catch (err) {
-      throw new Error(err);
+    } catch (error) {
+      throw new Error(error);
     }
   },
 
   cancelBooking: async (bookingId, email) => {
     try {
-      const response = await userRepository.bookingCancel(bookingId, email);
-      if (response) {
-        return true;
-      }
-    } catch (err) {
-      throw new Error(err);
+      await userRepository.bookingCancel(bookingId, email);
+    } catch (error) {
+      throw new Error(error);
     }
   },
 
@@ -64,13 +59,9 @@ export const userBookingUseCases = (userRepository) => ({
       const textReview = review.experience;
       const user = await userRepository.findByEmail(email);
       const userId = user._id;
-      const response = await userRepository.addingReview(rating, textReview, restId, userId);
-      if (response) {
-        return true;
-      }
-    } catch (err) {
-      console.log(err);
+      await userRepository.addingReview(rating, textReview, restId, userId);
+    } catch (error) {
+      throw new Error(error);
     }
   },
 });
-

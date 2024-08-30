@@ -6,6 +6,7 @@ import Reviews from "../models/Reviews.js";
 import Partners from "../models/Partners.js";
 import Admin from "../models/Admin.js";
 import Otp from "../models/Otp.js";
+import Tokens from "../models/Tokens.js";
 
 export const userRepository = {
   saveUser: async (User) => {
@@ -21,6 +22,31 @@ export const userRepository = {
     try {
       const otpModel = new Otp(otp);
       await otpModel.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  saveToken: async (token) => {
+    try {
+      const tokenModel = new Tokens(token);
+      await tokenModel.save();
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  findToken: async (token) => {
+    try {
+      return await Tokens.findOne({ token: token });
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  removeRestoreToken: async (id) => {
+    try {
+      await Tokens.findByIdAndDelete(id);
     } catch (error) {
       throw new Error(error);
     }
@@ -52,9 +78,7 @@ export const userRepository = {
 
   updateUser: async (userId, updatedUserData) => {
     try {
-      return await user.findByIdAndUpdate(userId, updatedUserData, {
-        new: true,
-      });
+      return await user.findByIdAndUpdate(userId, { $set: updatedUserData });
     } catch (error) {
       throw new Error(error);
     }

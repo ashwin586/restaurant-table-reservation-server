@@ -20,9 +20,9 @@ export const userAuthControllers = {
       const userDetails = req.body;
       await userAuthUseCaseInstance.registerUser(userDetails);
       return res.status(200).json({ email: userDetails.email });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
 
@@ -35,9 +35,9 @@ export const userAuthControllers = {
           .status(response.statusCode)
           .json({ message: response.error });
       return res.status(200).json({ userToken: response.userToken });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
 
@@ -51,9 +51,9 @@ export const userAuthControllers = {
       if (result) {
         return res.status(200).end();
       }
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json(err.message);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   },
 
@@ -62,27 +62,31 @@ export const userAuthControllers = {
       const email = req.body.email;
       const response = await userAuthUseCaseInstance.googleLogin(email);
       return res.status(200).json({ userToken: response });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json(err.message);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   },
 
-  forgotPassword: async (req, res) => {
+  sendLink: async (req, res) => {
     try {
-      const { password, email } = req.body;
-      const result = await userAuthUseCaseInstance.forgotPassword(
-        password,
-        email
-      );
-      if (result) {
-        return res
-          .status(200)
-          .json({ message: "Password updated successfully" });
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({ message: err.message });
+      const { email } = req.body;
+      await userAuthUseCaseInstance.sendLink(email);
+      return res.status(200).json({ message: "Password reset link sent." });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+
+  resetPassword: async (req, res) => {
+    try {
+      const { password, token } = req.body;
+      await userAuthUseCaseInstance.resetPassword(password, token);
+      return res.status(200).json({ message: "Password updated successfully" });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
 
@@ -103,6 +107,7 @@ export const userAuthControllers = {
       await userAuthUseCaseInstance.otpVerify(otp, email);
       return res.status(200).json({ message: "Verification Successfull" });
     } catch (error) {
+      console.log(error);
       return res.status(400).json({ message: error.message });
     }
   },
@@ -120,17 +125,8 @@ export const emailVerify = async (req, res) => {
       await sendMail(email, subject, text);
       return res.status(200).end();
     }
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: err.message });
-  }
-};
-
-export const checkUserStatus = async (req, res) => {
-  try {
-    const result = await existingUserStatus(req.token.email);
-    if (result) return res.status(200).end();
-  } catch (err) {
-    return res.status(400).json(err.message);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: error.message });
   }
 };

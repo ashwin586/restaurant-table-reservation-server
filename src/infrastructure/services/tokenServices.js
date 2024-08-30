@@ -29,3 +29,11 @@ export const generateAdminToken = async (email) => {
     console.log(err);
   }
 };
+
+export const restoreToken = async (email) => {
+  try {
+    return Jwt.sign({ email }, process.env.JWTSECRETKEY, { expiresIn: "20s" });
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -11,13 +11,12 @@ const otpSchema = new mongose.Schema({
     required: true,
   },
 
-  createdAt: {
+  expiresAt: {
     type: Date,
-    default: Date.now(),
-    expires: 30,
+    required: true,
   },
 });
 
-otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 30 });
+otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export default mongose.model("Otp", otpSchema);

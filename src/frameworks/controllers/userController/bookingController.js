@@ -9,28 +9,22 @@ export const userBookingControllers = {
   checkAvailablity: async (req, res) => {
     try {
       const data = req.query;
-      const result = await userBookingUseCasesInstance.bookingAvailablity(data);
-      if (result) {
-        return res.status(200).end();
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json(err.message);
+      await userBookingUseCasesInstance.bookingAvailablity(data);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   },
 
   bookingTable: async (req, res) => {
     try {
       const { email } = req.token;
-      const result = await userBookingUseCasesInstance.bookingTable(
-        req.body,
-        email
-      );
-      if (result) {
-        return res.status(200).end();
-      }
-    } catch (err) {
-      console.log(err);
+      await userBookingUseCasesInstance.bookingTable(req.body, email);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   },
 
@@ -38,15 +32,11 @@ export const userBookingControllers = {
     try {
       const email = req.token.email;
       const bookingId = req.body.id;
-      const result = await userBookingUseCasesInstance.cancelBooking(
-        bookingId,
-        email
-      );
-      if (result) {
-        return res.status(200).end();
-      }
-    } catch (err) {
-      console.log(err);
+      await userBookingUseCasesInstance.cancelBooking(bookingId, email);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   },
 
@@ -55,17 +45,11 @@ export const userBookingControllers = {
       const review = req.body.values;
       const restId = req.body.id;
       const email = req.token.email;
-      const result = await userBookingUseCasesInstance.addingReview(
-        review,
-        restId,
-        email
-      );
-      if (result) {
-        return res.status(200).end();
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json(err.message);
+      await userBookingUseCasesInstance.addingReview(review, restId, email);
+      return res.status(200).end();
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
     }
   },
 };

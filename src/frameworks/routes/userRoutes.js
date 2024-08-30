@@ -12,10 +12,11 @@ const userRoute = Router();
 userRoute.post("/registerUser", userAuthControllers.register);
 userRoute.post("/reSendOtp", userAuthControllers.resendOtp);
 userRoute.post("/login", userAuthControllers.login);
+userRoute.post("/sendlink", userAuthControllers.sendLink);
 userRoute.post("/otpVerify", userAuthControllers.otpVerify);
 userRoute.post("/google/signup", userAuthControllers.googleRegister);
 userRoute.post("/google/login", userAuthControllers.googleLogin);
-userRoute.post("/forgotpassword", userAuthControllers.forgotPassword);
+userRoute.post("/resetpassword", userAuthControllers.resetPassword);
 
 // * Profile Routes
 userRoute.get("/getuserprofile", decodeToken, userProfileControllers.fetchProfile);

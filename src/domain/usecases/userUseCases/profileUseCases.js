@@ -5,7 +5,7 @@ export const userProfileUseCases = (userRepository) => ({
     try {
       return await userRepository.findByEmail(email);
     } catch (error) {
-      throw new Error(error);
+      throw new Error("Failed to fetch user profile", error);
     }
   },
 
@@ -25,7 +25,7 @@ export const userProfileUseCases = (userRepository) => ({
         return await userRepository.updateUser(user._id, updatedFields);
       } else throw new Error("User not found");
     } catch (error) {
-      throw new Error(error);
+      throw new Error("Failed to edit user", error);
     }
   },
 
@@ -36,7 +36,7 @@ export const userProfileUseCases = (userRepository) => ({
       user.userImage = imageURL;
       return await userRepository.updateUser(userId, user);
     } catch (error) {
-      throw new Error(error);
+      throw new Error("Failed to upload image", error);
     }
   },
 
@@ -45,22 +45,23 @@ export const userProfileUseCases = (userRepository) => ({
       const bookings = await userRepository.fetchBookings(email);
       if (bookings) return bookings;
     } catch (error) {
-      throw new Error(error);
+      throw new Error("Couldn't fetch bookings", error);
     }
   },
+
   fetchReviews: async (email) => {
     try {
-      const response = await userRepository.fetchReviews(email);
-      return response;
+      return await userRepository.fetchReviews(email);
     } catch (error) {
-      throw new Error(error);
+      throw new Error("Couldn't fetch reviews", error);
     }
   },
+
   fetchReview: async (email, restId) => {
     try {
       return await userRepository.fetchReview(email, restId);
     } catch (error) {
-      throw new Error(error);
+      throw new Error("Failed to fetch review", error);
     }
   },
 });

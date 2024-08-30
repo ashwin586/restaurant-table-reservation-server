@@ -7,7 +7,6 @@ const userRestaurantUseCaseInstance = userRestaurantUseCases(
   userRepositoryInstance
 );
 
-
 export const userRestaurantControllers = {
   findAllRestaurants: async (req, res) => {
     try {
@@ -25,15 +24,14 @@ export const userRestaurantControllers = {
       const result = await userRestaurantUseCaseInstance.fetchRestaurant(
         req.query.id
       );
-      if (result) {
-        return res.status(200).json({
-          restaurant: result.restaurantDetails,
-          menus: result.menus,
-          reviews: result.reviews,
-        });
-      }
-    } catch (err) {
-      console.log(err);
+      return res.status(200).json({
+        restaurant: result.restaurantDetails,
+        menus: result.menus,
+        reviews: result.reviews,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: error.message });
     }
   },
 };

@@ -1,7 +1,10 @@
 export const userRepositoryInterface = (repository) => ({
   saveUser: (user) => repository.saveUser(user),
   saveOtp: (otp) => repository.saveOtp(otp),
+  saveToken: (token) => repository.saveToken(token),
   findByEmail: (email) => repository.findByEmail(email),
+  findToken: (token) => repository.findToken(token),
+  removeRestoreToken: (id) => repository.removeRestoreToken(id),
   findById: (id) => repository.findById(id),
   findOtp: (email) => repository.findOtp(email),
   updateUser: (userId, updatedUserData) =>

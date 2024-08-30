@@ -5,6 +5,7 @@ import {
 
 import { createUser } from "../../entities/user.js";
 import { createOtp } from "../../entities/otp.js";
+import { createToken } from "../../entities/tokens.js";
 
 export const userAuthUseCases = (
   userRepository,
@@ -14,7 +15,6 @@ export const userAuthUseCases = (
   registerUser: async (userDetails) => {
     try {
       const user = createUser(userDetails);
-
       const existingUser = await userRepository.findByEmail(user.email);
       if (existingUser) {
         throw new Error("User already exists");
@@ -23,22 +23,27 @@ export const userAuthUseCases = (
       user.password = await securePassword(userDetails.password);
 
       const otpGenerated = nodeMailer.generateOtp();
+      const expiresAt = new Date(Date.now() + 30 * 1000);
       const email = userDetails.email;
       const subject = "Email Verification otp";
       const text = `Your email verificatoin OTP is ${otpGenerated}`;
-      const otp = createOtp({ email: email, otp: otpGenerated });
+      const otp = createOtp({
+        email: email,
+        otp: otpGenerated,
+        expiresAt: expiresAt,
+      });
 
       await nodeMailer.sendMail(email, subject, text);
       await userRepository.saveUser(user);
       await userRepository.saveOtp(otp);
-    } catch (err) {
-      throw new Error(err.message);
+    } catch (error) {
+      throw new Error("Failed to register", error);
     }
   },
 
   loginUser: async (userData) => {
-    const email = userData.email;
     try {
+      const email = userData.email;
       const response = await userRepository.findByEmail(email);
       if (!response) {
         throw new Error("Email not registered");
@@ -63,8 +68,8 @@ export const userAuthUseCases = (
       } else {
         throw new Error("Invalid email or password");
       }
-    } catch (err) {
-      throw new Error(err.message);
+    } catch (error) {
+      throw new Error("Failed to login user", error);
     }
   },
 
@@ -77,8 +82,7 @@ export const userAuthUseCases = (
       const res = await userRepository.saveUser(user);
       if (res) return true;
     } catch (error) {
-      console.log(error);
-      throw new Error(error.message);
+      throw new Error("Google signup authentication failed", error);
     }
   },
 
@@ -95,39 +99,69 @@ export const userAuthUseCases = (
         );
       return await tokenServices.generateUserToken(email);
     } catch (error) {
-      console.log(error);
-      throw new Error(error);
+      throw new Error("Google signin authentication failed", error);
     }
   },
 
-  forgotPassword: async (password, email) => {
+  sendLink: async (email) => {
     try {
-      const hashedPassword = await securePassword(password);
-      const user = await userRepository.findByEmail(email);
-      if (user) {
-        // removeData(email); // ! Removing the email from the map in nodemailer (Need to re-write the logic of nodemailer)
-        const updatedPassword = { password: hashedPassword };
-        return await userRepository.forgotPassword(user._id, updatedPassword);
-      } else {
-        throw new Error("Oops! Something went wrong...");
-      }
+      const existingUser = await userRepository.findByEmail(email);
+      const userId = existingUser._id;
+      if (!existingUser) throw new Error("Email not registered");
+
+      const token = await tokenServices.restoreToken(email);
+      const expiresAt = new Date(Date.now() + 60 * 1000);
+
+      const restoreToken = createToken({
+        userId: userId,
+        token: token,
+        expiresAt: expiresAt,
+      });
+
+      const resetLink = `${process.env.RESETLINK}?token=${token}`;
+      const subject = "Password Reset Link";
+      const text = `<p> <a href="${resetLink}">Click here</a> to reset your password. The link will expire in 5 minutes.</p>`;
+
+      await nodeMailer.sendLink(email, subject, text);
+      await userRepository.saveToken(restoreToken);
     } catch (error) {
-      console.log(error);
-      throw new Error(error);
+      throw new Error("Something went wrong", error);
+    }
+  },
+
+  resetPassword: async (password, token) => {
+    try {
+      const existingToken = await userRepository.findToken(token);
+      if (!existingToken) throw new Error("Invalid or Expired Token");
+      const tokenId = existingToken._id;
+
+      const hashedPassword = await securePassword(password);
+
+      const userId = existingToken.userId;
+
+      const updatedPassword = { password: hashedPassword };
+      await userRepository.updateUser(userId, updatedPassword);
+      await userRepository.removeRestoreToken(tokenId);
+    } catch (error) {
+      throw new Error(`Failed to reset password: ${error.message}`);
     }
   },
 
   resendOtp: async (email) => {
     try {
       const otpGenerated = nodeMailer.generateOtp();
+      const expiresAt = new Date(Date.now() + 30 * 1000);
       const subject = "Email Verification otp";
       const text = `Your email verificatoin OTP is ${otpGenerated}`;
-      const otp = createOtp({ email: email, otp: otpGenerated });
+      const otp = createOtp({
+        email: email,
+        otp: otpGenerated,
+        expiresAt: expiresAt,
+      });
       await nodeMailer.sendMail(email, subject, text);
       await userRepository.saveOtp(otp);
     } catch (error) {
-      console.log(error);
-      throw new Error(error);
+      throw new Error("Failed to send otp", error);
     }
   },
 
@@ -142,42 +176,7 @@ export const userAuthUseCases = (
         await userRepository.updateUser(userId, existingUser);
       } else throw new Error("Entered otp is wrong.");
     } catch (error) {
-      throw new Error(error);
+      throw new Error("OTP verification failed", error);
     }
   },
 });
-
-export const checkExistingUser = async (email) => {
-  try {
-    const user = await findUser(email);
-    if (!user) throw new Error("Email not registered");
-    if (user) {
-      if (user.accountStatus)
-        throw new Error("Account has been blocked by the admin");
-      const userToken = await generateUserToken(email);
-      return { userToken };
-    }
-  } catch (err) {
-    throw new Error(err.message);
-  }
-};
-
-export const checkUser = async (email) => {
-  try {
-    const user = await findUser(email);
-    if (!user) throw new Error("Email not registered");
-    return user;
-  } catch (err) {
-    throw new Error(err.message);
-  }
-};
-
-export const existingUserStatus = async (email) => {
-  try {
-    const user = await findUser(email);
-    if (!user.accountStatus) return true;
-    else throw new Error("Something went wrong");
-  } catch (err) {
-    throw new Error(err.message);
-  }
-};
