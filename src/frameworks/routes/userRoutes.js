@@ -30,6 +30,8 @@ userRoute.get("/fetchReviews", decodeToken, userProfileControllers.fetchReviews)
 userRoute.get("/getAllRestaurants", userRestaurantControllers.findAllRestaurants);
 userRoute.get("/getRestaurantDetails", userRestaurantControllers.findRestaurant);
 userRoute.get("/seatAvailablity", userBookingControllers.checkAvailablity);
+userRoute.post("/createPayment", decodeToken, userBookingControllers.initiatePayment);
+userRoute.post("/verifyPayment", userBookingControllers.verifyPayment);
 userRoute.put("/bookingCancel", decodeToken, userBookingControllers.cancelBooking);
 userRoute.post("/bookingTable", decodeToken, userBookingControllers.bookingTable);
 userRoute.post("/userReview", decodeToken, userBookingControllers.userReview);

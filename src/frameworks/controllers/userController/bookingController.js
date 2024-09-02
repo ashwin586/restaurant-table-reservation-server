@@ -2,8 +2,13 @@ import { userRepository } from "../../../infrastructure/repositories/userReposit
 import { userRepositoryInterface } from "../../../domain/repositories/userRepository.js";
 import { userBookingUseCases } from "../../../domain/usecases/userUseCases/bookingUseCases.js";
 
+import * as razorpay from "../../../infrastructure/services/razorPay.js";
+
 const userRepositoryInstance = userRepositoryInterface(userRepository);
-const userBookingUseCasesInstance = userBookingUseCases(userRepositoryInstance);
+const userBookingUseCasesInstance = userBookingUseCases(
+  userRepositoryInstance,
+  razorpay
+);
 
 export const userBookingControllers = {
   checkAvailablity: async (req, res) => {
@@ -21,7 +26,39 @@ export const userBookingControllers = {
     try {
       const { email } = req.token;
       await userBookingUseCasesInstance.bookingTable(req.body, email);
-      return res.status(200).end();
+      return res.status(200).json("Payment success, Seat has been booked");
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+
+  initiatePayment: async (req, res) => {
+    try {
+      const { amount, currency } = req.body;
+      const response = await userBookingUseCasesInstance.initiatePayment(
+        amount,
+        currency
+      );
+
+      return res.status(200).json(response);
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json(error.message);
+    }
+  },
+
+  verifyPayment: async (req, res) => {
+    try {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+        req.body;
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+      const response = await userBookingUseCasesInstance.verifyPayment(
+        body,
+        razorpay_signature
+      );
+      console.log(response);
+      return res.status(200).json();
     } catch (error) {
       console.log(error);
       return res.status(400).json(error.message);

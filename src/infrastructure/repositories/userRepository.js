@@ -212,7 +212,7 @@ export const userRepository = {
         );
       }
       await Admin.findOneAndUpdate({ $inc: { revenue: adminRevenue } });
-      return await newBooking.save();
+      await newBooking.save();
     } catch (err) {
       console.log(err);
     }
@@ -252,6 +252,7 @@ export const userRepository = {
       console.log(err);
     }
   },
+
   addingReview: async (rating, textReview, restId, userId) => {
     try {
       const existingReview = await Reviews.findOne({

@@ -1,4 +1,4 @@
-export const userBookingUseCases = (userRepository) => ({
+export const userBookingUseCases = (userRepository, razorPay) => ({
   bookingAvailablity: async (data) => {
     try {
       const { restaurantId, selectedSeats, bookingDate, bookingTime } = data;
@@ -40,6 +40,27 @@ export const userBookingUseCases = (userRepository) => ({
         partnerRevenue,
         adminRevenue
       );
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  initiatePayment: async (amount, currency) => {
+    try {
+      const payment = await razorPay.initiatePayment(amount, currency);
+      return payment;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  verifyPayment: async (body, razorpay_signature) => {
+    try {
+      const result = await razorPay.handlePayment(
+        body,
+        razorpay_signature,
+      );
+      if (result) return true;
     } catch (error) {
       throw new Error(error);
     }

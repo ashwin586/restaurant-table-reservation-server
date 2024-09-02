@@ -22,5 +22,5 @@ export const userRepositoryInterface = (repository) => ({
   periodBookings: (restaurantId, bookedDate, bookedTime) =>
     repository.periodBookings(restaurantId, bookedDate, bookedTime),
   addingReview: (rating, textReview, restId, userId) =>
-    repository(rating, textReview, restId, userId),
+    repository.addingReview(rating, textReview, restId, userId),
 });
